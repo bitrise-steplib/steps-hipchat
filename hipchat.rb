@@ -5,7 +5,7 @@ options = {
   token: ENV['HIPCHAT_TOKEN'],
   roomid: ENV['HIPCHAT_ROOMID'],
   fromname: ENV['HIPCHAT_FROMNAME'],
-  message: "Quick test"
+  message: ENV['HIPCHAT_MESSAGE']
 }
 
 p "Options: #{options}"
