@@ -1,5 +1,4 @@
 require 'hipchat-api'
-require 'optparse'
 
 options = {
   token: ENV['HIPCHAT_TOKEN'],
