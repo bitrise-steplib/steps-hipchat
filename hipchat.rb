@@ -9,5 +9,15 @@ options = {
 
 p "Options: #{options}"
 
-hipchat_api = HipChat::API.new(options[:token])
-p hipchat_api.rooms_message(options[:roomid], options[:fromname], options[:message])
+begin
+  hipchat_api = HipChat::API.new(options[:token])
+  resp = hipchat_api.rooms_message(options[:roomid], options[:fromname], options[:message])
+  p resp
+  if resp["error"]
+    puts %{ [i] Error: #{resp["error"]}}
+    exit 1
+  end
+rescue => ex
+  puts "Exception happened: #{ex}"
+  exit 1
+end
