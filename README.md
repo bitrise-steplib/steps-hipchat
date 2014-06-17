@@ -14,4 +14,3 @@ Concrete HipChat message Step.
 # TODO
 
 - HipChat color support
-- Re-write with CURL: https://gist.github.com/danriti/3095606
