@@ -1,0 +1,19 @@
+name: Send HipChat message
+description: |
+  Send a HipChat message to a room
+
+inputs:
+  - title: |
+      HipChat Token
+    mapped_to: HIPCHAT_TOKEN
+  - title: |
+      HipChat RoomID
+    mapped_to: HIPCHAT_ROOMID
+  - title: |
+      From Name
+    mapped_to: HIPCHAT_FROMNAME
+  - title: |
+      Message
+    mapped_to: HIPCHAT_MESSAGE
+
+# outputs:
