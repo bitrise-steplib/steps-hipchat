@@ -1,6 +1,5 @@
 #!/bin/bash
 
-<<<<<<< HEAD
 echo "Configs:"
 echo " * HIPCHAT_TOKEN: $HIPCHAT_TOKEN"
 echo " * HIPCHAT_ROOMID: $HIPCHAT_ROOMID"
@@ -21,8 +20,6 @@ if [ ! -n "$HIPCHAT_ROOMID" ]; then
   echo
   exit 1
 fi
-
-############
 
 from_name='Concrete'
 if [ -n "$HIPCHAT_FROMNAME" ]; then
@@ -64,12 +61,3 @@ else
 fi
 
 exit 1
-=======
-# SSL certificate fix so it can be executed in an isolated, non admin user
-curl http://curl.haxx.se/ca/cacert.pem > $HOME/cacert.pem
-export SSL_CERT_FILE=$HOME/cacert.pem
-
-bundle install
-ruby ./hipchat.rb
-exit $?
->>>>>>> 7808dc1fc3dcea15e7c9d145d43cb1944618a5ac
