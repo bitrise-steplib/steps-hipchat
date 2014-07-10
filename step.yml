@@ -1,0 +1,28 @@
+name: Send HipChat message
+description: |
+  Send a HipChat message to a room.
+
+inputs:
+  - title: |
+      HipChat Auth Token
+    mapped_to: HIPCHAT_TOKEN
+  - title: |
+      HipChat RoomID
+    mapped_to: HIPCHAT_ROOMID
+  - title: |
+      From Name (max 15 characters)
+    mapped_to: HIPCHAT_FROMNAME
+  - title: |
+      Message Color - options:
+       * yellow (default)
+       * red
+       * green
+       * purple
+       * gray
+       * random
+    mapped_to: HIPCHAT_MESSAGE_COLOR
+  - title: |
+      Message
+    mapped_to: HIPCHAT_MESSAGE
+
+# outputs:
