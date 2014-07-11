@@ -21,7 +21,7 @@ if [ ! -n "$HIPCHAT_ROOMID" ]; then
   exit 1
 fi
 
-from_name='Concrete'
+from_name='Bitrise'
 if [ -n "$HIPCHAT_FROMNAME" ]; then
   from_name="$HIPCHAT_FROMNAME"
 fi
