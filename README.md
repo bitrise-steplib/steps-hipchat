@@ -1,7 +1,7 @@
 hipchat
 =======
 
-Concrete HipChat message Step.
+Bitrise HipChat message Step.
 
 
 # How to test/run locally?
