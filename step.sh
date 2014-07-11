@@ -8,13 +8,16 @@ echo " * HIPCHAT_MESSAGE_COLOR: $HIPCHAT_MESSAGE_COLOR"
 echo " * HIPCHAT_MESSAGE: $HIPCHAT_MESSAGE"
 echo
 
+# Input validation
 if [ ! -n "$HIPCHAT_TOKEN" ]; then
-  echo " [!] HIPCHAT_TOKEN is missing!"
+  echo " [!] HIPCHAT_TOKEN is missing! Terminating..."
+  echo
   exit 1
 fi
 
 if [ ! -n "$HIPCHAT_ROOMID" ]; then
-  echo " [!] HIPCHAT_ROOMID is missing!"
+  echo " [!] HIPCHAT_ROOMID is missing! Terminating..."
+  echo
   exit 1
 fi
 
