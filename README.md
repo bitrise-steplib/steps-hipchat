@@ -12,8 +12,8 @@ Bitrise HipChat message Step.
 
 # Where to get token:
 
-https://bitfall-team.hipchat.com/admin/api
+[https://bitfall-team.hipchat.com/admin/api](https://bitfall-team.hipchat.com/admin/api)
 
 # Where to get room id:
 
-https://bitfall-team.hipchat.com/admin/rooms
+[https://bitfall-team.hipchat.com/admin/rooms](https://bitfall-team.hipchat.com/admin/rooms)

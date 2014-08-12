@@ -24,16 +24,16 @@ echo
 if [ ! -n "$HIPCHAT_TOKEN" ]; then
   echo " [!] HIPCHAT_TOKEN is missing! Terminating..."
   echo
-  echo_string_to_formatted_output "# Error!"
-  echo_string_to_formatted_output "Reason: HipChat token (HIPCHAT_TOKEN) is missing!"
+  write_section_to_formatted_output "# Error!"
+  write_section_to_formatted_output "Reason: HipChat token (HIPCHAT_TOKEN) is missing!"
   exit 1
 fi
 
 if [ ! -n "$HIPCHAT_ROOMID" ]; then
   echo " [!] HIPCHAT_ROOMID is missing! Terminating..."
   echo
-  echo_string_to_formatted_output "# Error!"
-  echo_string_to_formatted_output "Reason: HipChat room id (HIPCHAT_ROOMID) is missing!"
+  write_section_to_formatted_output "# Error!"
+  write_section_to_formatted_output "Reason: HipChat room id (HIPCHAT_ROOMID) is missing!"
   exit 1
 fi
 
@@ -71,13 +71,16 @@ echo "curl_response: $curl_response"
 err_search=$(echo $curl_response | grep error)
 
 if [ "$err_search" == "" ]; then
-  echo_string_to_formatted_output "# Message successfully sent!"
-  echo_string_to_formatted_output "### From: $HIPCHAT_FROMNAME"
-  echo_string_to_formatted_output "### Message:"
-  echo_string_to_formatted_output "$HIPCHAT_MESSAGE"
+  write_section_to_formatted_output "# Message successfully sent!"
+  write_section_to_formatted_output "### From: ${HIPCHAT_FROMNAME}"
+  write_section_to_formatted_output "### Message:"
+  write_section_to_formatted_output "${HIPCHAT_MESSAGE}"
   exit 0
 else
   echo "Failed"
+  write_section_to_formatted_output "# Message send failed!"
+  write_section_to_formatted_output "Error message:"
+  write_section_to_formatted_output "    ${curl_response}"
 fi
 
 exit 1
