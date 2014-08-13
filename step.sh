@@ -25,7 +25,7 @@ if [ ! -n "$HIPCHAT_TOKEN" ]; then
   echo " [!] HIPCHAT_TOKEN is missing! Terminating..."
   echo
   write_section_to_formatted_output "# Error!"
-  write_section_to_formatted_output "Reason: HipChat token (HIPCHAT_TOKEN) is missing!"
+  write_section_to_formatted_output "Reason: HipChat token is missing."
   exit 1
 fi
 
@@ -33,7 +33,7 @@ if [ ! -n "$HIPCHAT_ROOMID" ]; then
   echo " [!] HIPCHAT_ROOMID is missing! Terminating..."
   echo
   write_section_to_formatted_output "# Error!"
-  write_section_to_formatted_output "Reason: HipChat room id (HIPCHAT_ROOMID) is missing!"
+  write_section_to_formatted_output "Reason: HipChat room id is missing."
   exit 1
 fi
 
