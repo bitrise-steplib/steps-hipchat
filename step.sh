@@ -72,8 +72,11 @@ err_search=$(echo $curl_response | grep error)
 
 if [ "$err_search" == "" ]; then
   write_section_to_formatted_output "# Message successfully sent!"
-  write_section_to_formatted_output "### From: ${HIPCHAT_FROMNAME}"
-  write_section_to_formatted_output "### Message:"
+  write_section_to_formatted_output "## From:"
+  write_section_to_formatted_output "${HIPCHAT_FROMNAME}"
+  write_section_to_formatted_output "## To Room:"
+  write_section_to_formatted_output "${HIPCHAT_ROOMID}"
+  write_section_to_formatted_output "## Message:"
   write_section_to_formatted_output "${HIPCHAT_MESSAGE}"
   exit 0
 else
