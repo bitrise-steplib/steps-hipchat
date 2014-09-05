@@ -1,5 +1,17 @@
 #!/bin/bash
 
+formatted_output_file_path="$BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH"
+
+function echo_string_to_formatted_output {
+  echo "$1" >> $formatted_output_file_path
+}
+
+function write_section_to_formatted_output {
+  echo '' >> $formatted_output_file_path
+  echo "$1" >> $formatted_output_file_path
+  echo '' >> $formatted_output_file_path
+}
+
 echo "Configs:"
 echo " * HIPCHAT_TOKEN: $HIPCHAT_TOKEN"
 echo " * HIPCHAT_ROOMID: $HIPCHAT_ROOMID"
@@ -12,12 +24,16 @@ echo
 if [ ! -n "$HIPCHAT_TOKEN" ]; then
   echo " [!] HIPCHAT_TOKEN is missing! Terminating..."
   echo
+  write_section_to_formatted_output "# Error!"
+  write_section_to_formatted_output "Reason: HipChat token is missing."
   exit 1
 fi
 
 if [ ! -n "$HIPCHAT_ROOMID" ]; then
   echo " [!] HIPCHAT_ROOMID is missing! Terminating..."
   echo
+  write_section_to_formatted_output "# Error!"
+  write_section_to_formatted_output "Reason: HipChat room id is missing."
   exit 1
 fi
 
@@ -55,9 +71,16 @@ echo "curl_response: $curl_response"
 err_search=$(echo $curl_response | grep error)
 
 if [ "$err_search" == "" ]; then
+  write_section_to_formatted_output "# Message successfully sent!"
+  write_section_to_formatted_output "### From: ${HIPCHAT_FROMNAME}"
+  write_section_to_formatted_output "### Message:"
+  write_section_to_formatted_output "${HIPCHAT_MESSAGE}"
   exit 0
 else
   echo "Failed"
+  write_section_to_formatted_output "# Message send failed!"
+  write_section_to_formatted_output "Error message:"
+  write_section_to_formatted_output "    ${curl_response}"
 fi
 
 exit 1
