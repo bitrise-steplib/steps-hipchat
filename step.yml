@@ -2,23 +2,40 @@ name: Send HipChat message
 description: |
   Send a HipChat message to a room.
   
-  This Step requires a HipChat account. To sign up on HipChat for free, [click here](https://www.hipchat.com/sign_up)
+  This Step requires a HipChat account.
+  To sign up on HipChat for free, [click here](https://www.hipchat.com/sign_up).
 
-  You can get your HipChat auth token in Account settings > API access. If you do not have an auth token, select Create token, at the bottom
-  You can get the room id of any HipChat room by selecting Rooms > Summary > API ID
+  You can get your HipChat auth token
+  in **Account settings > API access**.
+  *If you do not have an auth token, select Create token*, at the bottom.
+  
+  You can get the *room id* of any HipChat room by selecting *Rooms > Summary > API ID*.
+website: https://github.com/bitrise-io/steps-hipchat
+source:
+  git: https://github.com/bitrise-io/steps-hipchat.git
+host_os_tags:
+  - osx-10.9
+type_tags:
+  - IM
+  - notification
+requires_admin_user: false
 
 inputs:
   - title: |
       HipChat Auth Token
     mapped_to: HIPCHAT_TOKEN
+    is_expand: false
   - title: |
       HipChat RoomID
     mapped_to: HIPCHAT_ROOMID
+    is_expand: false
   - title: |
       From Name (max 15 characters)
     mapped_to: HIPCHAT_FROMNAME
+    is_expand: false
   - title: |
       Message Color - options:
+
        * yellow (default)
        * red
        * green
@@ -26,8 +43,8 @@ inputs:
        * gray
        * random
     mapped_to: HIPCHAT_MESSAGE_COLOR
+    is_expand: false
   - title: |
       Message
     mapped_to: HIPCHAT_MESSAGE
-
-# outputs:
+    is_expand: true

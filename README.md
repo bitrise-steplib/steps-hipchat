@@ -1,14 +1,9 @@
 hipchat
 =======
 
-Bitrise HipChat message Step.
+HipChat message sender Step.
 
-This Step requires a HipChat account. To sign up on HipChat for free, [click here](https://www.hipchat.com/sign_up)
-
-You can get your HipChat auth token in Account settings > API access. If you do not have an auth token, select Create token, at the bottom
-You can get the room id of any HipChat room by selecting Rooms > Summary > API ID
-
-This Step is part of the [Open StepLib](http://www.steplib.com/), you can find its StepLib page [here](http://www.steplib.com/step/hipchat)
+This Step is part of the [Open StepLib](http://www.steplib.com/), you can find its StepLib page [here](http://www.steplib.com/step/hipchat).
 
 # Input Environment Variables
 - **HIPCHAT_TOKEN**
