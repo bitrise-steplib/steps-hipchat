@@ -5,6 +5,7 @@ description: |
   **This Step requires a HipChat account.**
   [Click here](https://www.hipchat.com) to sign in or sign up on HipChat, for free.
 website: https://github.com/bitrise-io/steps-hipchat
+fork_url: https://github.com/bitrise-io/steps-hipchat
 source:
   git: https://github.com/bitrise-io/steps-hipchat.git
 host_os_tags:
@@ -13,13 +14,12 @@ type_tags:
   - IM
   - notification
 is_requires_admin_user: false
-
 inputs:
   - 
     mapped_to: HIPCHAT_TOKEN
     title: HipChat Auth Token
     description: |
-      This Step uses the HipChat API v1, you can register a v1 API Token at [https://www.hipchat.com/admin/api](https://www.hipchat.com/admin/api).
+      This Step uses HipChat API v1, you can register a v1 API Token at [https://www.hipchat.com/admin/api](https://www.hipchat.com/admin/api).
     is_expand: false
   - 
     mapped_to: HIPCHAT_ROOMID
