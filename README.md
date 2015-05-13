@@ -1,4 +1,4 @@
-hipchat
+Send HipChat message Step
 =======
 
 HipChat message sender Step.
