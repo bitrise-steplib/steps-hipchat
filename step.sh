@@ -104,7 +104,6 @@ if [[ "${isBuildFailedMode}" == "1" ]] ; then
   write_section_to_formatted_output "# Message send failed!"
   write_section_to_formatted_output "Error message:"
   write_section_to_formatted_output "    ${message}"
-  exit 1
 elif [ "$err_search" == "" ] ; then
   write_section_to_formatted_output "# Message successfully sent!"
   write_section_to_formatted_output "## From:"
@@ -113,7 +112,7 @@ elif [ "$err_search" == "" ] ; then
   write_section_to_formatted_output "${HIPCHAT_ROOMID}"
   write_section_to_formatted_output "## Message:"
   write_section_to_formatted_output "${message}"
-  exit 0
+  exit 1
 else
   echo "Failed"
   write_section_to_formatted_output "# Message send failed!"
@@ -121,4 +120,4 @@ else
   write_section_to_formatted_output "    ${curl_response}"
 fi
 
-exit 1
+exit 0
