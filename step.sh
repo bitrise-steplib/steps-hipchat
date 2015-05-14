@@ -92,10 +92,10 @@ urlencode() {
   done
 }
 
-from_name=$(urlencode "$from_name")
+url_encoded_from_name=$(urlencode "$from_name")
 msg_color=$(urlencode "$msg_color")
 
-CONFIG="room_id=$HIPCHAT_ROOMID&from=$from_name&color=$msg_color"
+CONFIG="room_id=$HIPCHAT_ROOMID&from=$url_encoded_from_name&color=$msg_color"
 
 curl_response=`curl -d $CONFIG --data-urlencode "message=$message" "https://api.hipchat.com/v1/rooms/message?auth_token=$HIPCHAT_TOKEN&format=json"`
 echo "curl_response: $curl_response"
