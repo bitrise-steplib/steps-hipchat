@@ -33,7 +33,8 @@ inputs:
     mapped_to: HIPCHAT_FROM_NAME
     title: "From Name"
     description: |
-      The one which should be presented as the sender of the message
+      The one which should be presented as the sender of the message.
+
       *max 15 characters*
     is_expand: false
     is_required: false
@@ -42,21 +43,9 @@ inputs:
     title: "From Name - if the build failed"
     description: |
       **This option will be used if the build failed.** If you
-      leave this option empty then the default one will be use
+      leave this option empty then the default one will be use.
+
       *max 15 characters*
-    is_expand: false
-    is_required: false
-  - 
-    mapped_to: HIPCHAT_MESSAGE_COLOR
-    title: Message Color
-    value_options:
-      - yellow
-      - red
-      - green
-      - purple
-      - gray
-      - random
-    value: yellow
     is_expand: false
     is_required: false
   - 
@@ -72,3 +61,17 @@ inputs:
       leave this option empty then the default one will be used.
     is_expand: true
     is_required: false
+  - 
+    mapped_to: HIPCHAT_MESSAGE_COLOR
+    title: Message Color
+    value_options:
+      - yellow
+      - red
+      - green
+      - purple
+      - gray
+      - random
+    value: yellow
+    is_expand: false
+    is_required: false
+
