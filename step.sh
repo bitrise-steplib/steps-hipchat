@@ -19,13 +19,14 @@ if [ -z "$HIPCHAT_ROOMID" ]; then
   exit 1
 fi
 
+if [ -z "$HIPCHAT_FROM_NAME" ]; then
+  write_section_to_formatted_output '*Notice: `$HIPCHAT_FROM_NAME` is not provided!*'
+  exit 1
+fi
+
 # - optional
 if [ -z "$HIPCHAT_MESSAGE" ]; then
   write_section_to_formatted_output '*Notice: `$HIPCHAT_MESSAGE` is not provided!*'
-fi
-
-if [ -z "$HIPCHAT_FROM_NAME" ]; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_FROM_NAME` is not provided!*'
 fi
 
 if [ -z "$HIPCHAT_MESSAGE_COLOR" ]; then
@@ -41,35 +42,35 @@ if [ -z "$HIPCHAT_ERROR_MESSAGE_TEXT" ]; then
 fi
 
 # Build failed mode
-isBuildFailedMode = "0" #success
+isBuildFailedMode="0" #success
 if [ -n "$STEPLIB_BUILD_STATUS"]; then
-  isBuildFailedMode = ${STEPLIB_BUILD_STATUS}
+  isBuildFailedMode="${STEPLIB_BUILD_STATUS}"
 fi
 
 # Curl params
-error_message=HIPCHAT_MESSAGE
+error_message="${HIPCHAT_MESSAGE}"
 if [ -n "$HIPCHAT_ERROR_MESSAGE_TEXT" ]; then
-  error_message=HIPCHAT_ERROR_FROM_NAME
+  error_message="${HIPCHAT_ERROR_FROM_NAME}"
 fi
 
-error_from_name=HIPCHAT_FROM_NAME
+error_from_name="${HIPCHAT_FROM_NAME}"
 if [ -n "$HIPCHAT_ERROR_FROM_NAME" ]; then
-  error_from_name=HIPCHAT_ERROR_FROM_NAME
+  error_from_name="${HIPCHAT_ERROR_FROM_NAME}"
 fi
 
-message=HIPCHAT_MESSAGE
-if [[ isBuildFailedMode == "1"]]; then
-  message=error_message
+message="${HIPCHAT_MESSAGE}"
+if [[ isBuildFailedMode == "1" ]]; then
+  message="${error_message}"
 fi
 
-from_name=HIPCHAT_FROM_NAME
-if [[ isBuildFailedMode == "1"]]; then
-  from_name=error_from_name
+from_name="${HIPCHAT_FROM_NAME}"
+if [[ isBuildFailedMode == "1" ]]; then
+  from_name="${error_from_name}"
 fi
 
 msg_color='yellow'
 if [ -n "$HIPCHAT_MESSAGE_COLOR" ]; then
-  msg_color=HIPCHAT_MESSAGE_COLOR
+  msg_color="${HIPCHAT_MESSAGE_COLOR}"
 fi
 
 
