@@ -24,8 +24,8 @@ if [ -z "$HIPCHAT_MESSAGE" ]; then
   write_section_to_formatted_output '*Notice: `$HIPCHAT_MESSAGE` is not provided!*'
 fi
 
-if [ -z "$HIPCHAT_FROMNAME" ]; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_FROMNAME` is not provided!*'
+if [ -z "$HIPCHAT_FROM_NAME" ]; then
+  write_section_to_formatted_output '*Notice: `$HIPCHAT_FROM_NAME` is not provided!*'
 fi
 
 if [ -z "$HIPCHAT_MESSAGE_COLOR" ]; then
@@ -52,7 +52,7 @@ if [ -n "$HIPCHAT_ERROR_MESSAGE_TEXT" ]; then
   error_message=HIPCHAT_ERROR_FROM_NAME
 fi
 
-error_from_name=HIPCHAT_FROMNAME
+error_from_name=HIPCHAT_FROM_NAME
 if [ -n "$HIPCHAT_ERROR_FROM_NAME" ]; then
   error_from_name=HIPCHAT_ERROR_FROM_NAME
 fi
@@ -62,7 +62,7 @@ if [[ isBuildFailedMode == "1"]]; then
   message=error_message
 fi
 
-from_name=HIPCHAT_FROMNAME
+from_name=HIPCHAT_FROM_NAME
 if [[ isBuildFailedMode == "1"]]; then
   from_name=error_from_name
 fi
@@ -104,7 +104,7 @@ if [[ isBuildFailedMode == "0"]]; then
 elif [ "$err_search" == "" ]; then
   write_section_to_formatted_output "# Message successfully sent!"
   write_section_to_formatted_output "## From:"
-  write_section_to_formatted_output "${HIPCHAT_FROMNAME}"
+  write_section_to_formatted_output "${HIPCHAT_FROM_NAME}"
   write_section_to_formatted_output "## To Room:"
   write_section_to_formatted_output "${HIPCHAT_ROOMID}"
   write_section_to_formatted_output "## Message:"
