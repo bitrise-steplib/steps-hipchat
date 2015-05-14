@@ -24,11 +24,12 @@ if [ -z "$HIPCHAT_FROMNAME" ] ; then
   exit 1
 fi
 
-# - optional
 if [ -z "$HIPCHAT_MESSAGE" ] ; then
   write_section_to_formatted_output '*Notice: `$HIPCHAT_MESSAGE` is not provided!*'
+  exit 1
 fi
 
+# - optional
 if [ -z "$HIPCHAT_MESSAGE_COLOR" ] ; then
   write_section_to_formatted_output '*Notice: `$HIPCHAT_MESSAGE_COLOR` is not provided!*'
 fi
@@ -100,11 +101,19 @@ curl_response=`curl -d $CONFIG --data-urlencode "message=$message" "https://api.
 echo "curl_response: $curl_response"
 err_search=$(echo $curl_response | grep error)
 
+if [[ "$err_search" != "" ]]; then
+  echo "Failed"
+  write_section_to_formatted_output "# Message send failed!"
+  write_section_to_formatted_output "Error message:"
+  write_section_to_formatted_output "    ${curl_response}"
+  exit 1
+fi
+
 if [[ "${isBuildFailedMode}" == "1" ]] ; then
   write_section_to_formatted_output "# Message send failed!"
   write_section_to_formatted_output "Error message:"
   write_section_to_formatted_output "    ${message}"
-elif [ "$err_search" == "" ] ; then
+else
   write_section_to_formatted_output "# Message successfully sent!"
   write_section_to_formatted_output "## From:"
   write_section_to_formatted_output "${HIPCHAT_FROMNAME}"
@@ -112,12 +121,6 @@ elif [ "$err_search" == "" ] ; then
   write_section_to_formatted_output "${HIPCHAT_ROOMID}"
   write_section_to_formatted_output "## Message:"
   write_section_to_formatted_output "${message}"
-  exit 1
-else
-  echo "Failed"
-  write_section_to_formatted_output "# Message send failed!"
-  write_section_to_formatted_output "Error message:"
-  write_section_to_formatted_output "    ${curl_response}"
 fi
 
 exit 0
