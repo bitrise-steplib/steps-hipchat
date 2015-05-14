@@ -42,18 +42,18 @@ fi
 
 # Build failed mode
 isBuildFailedMode = "0" #success
-if [ -z "$STEPLIB_BUILD_STATUS"]; then
+if [ -n "$STEPLIB_BUILD_STATUS"]; then
   isBuildFailedMode = ${STEPLIB_BUILD_STATUS}
 fi
 
 # Curl params
 error_message=HIPCHAT_MESSAGE
-if [ -z "$HIPCHAT_ERROR_MESSAGE_TEXT" ]; then
+if [ -n "$HIPCHAT_ERROR_MESSAGE_TEXT" ]; then
   error_message=HIPCHAT_ERROR_FROM_NAME
 fi
 
 error_from_name=HIPCHAT_FROMNAME
-if [ -z "$HIPCHAT_ERROR_FROM_NAME" ]; then
+if [ -n "$HIPCHAT_ERROR_FROM_NAME" ]; then
   error_from_name=HIPCHAT_ERROR_FROM_NAME
 fi
 
@@ -68,7 +68,7 @@ if [[ isBuildFailedMode == "1"]]; then
 fi
 
 msg_color='yellow'
-if [ -z "$HIPCHAT_MESSAGE_COLOR" ]; then
+if [ -n "$HIPCHAT_MESSAGE_COLOR" ]; then
   msg_color=HIPCHAT_MESSAGE_COLOR
 fi
 
