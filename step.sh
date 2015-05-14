@@ -34,36 +34,36 @@ function write_success_section_to_foramtted_output {
 # Input validation
 # - required
 if [  -z "$HIPCHAT_TOKEN" ] ; then
-  write_error_section_to_foramtted_output '`$HIPCHAT_TOKEN` is not provided!*'
+  write_error_section_to_foramtted_output '`$HIPCHAT_TOKEN` is not provided!'
   exit 1
 fi
 
 if [ -z "$HIPCHAT_ROOMID" ] ; then
-  write_error_section_to_foramtted_output '`$HIPCHAT_ROOMID` is not provided!*'
+  write_error_section_to_foramtted_output '`$HIPCHAT_ROOMID` is not provided!'
   exit 1
 fi
 
 if [ -z "$HIPCHAT_FROMNAME" ] ; then
-  write_error_section_to_foramtted_output '`$HIPCHAT_FROMNAME` is not provided!*'
+  write_error_section_to_foramtted_output '`$HIPCHAT_FROMNAME` is not provided!'
   exit 1
 fi
 
 if [ -z "$HIPCHAT_MESSAGE" ] ; then
-  write_error_section_to_foramtted_output '`$HIPCHAT_MESSAGE` is not provided!*'
+  write_error_section_to_foramtted_output '`$HIPCHAT_MESSAGE` is not provided!'
   exit 1
 fi
 
 # - optional
 if [ -z "$HIPCHAT_MESSAGE_COLOR" ] ; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_MESSAGE_COLOR` is not provided!*'
+  write_section_to_formatted_output '`$HIPCHAT_MESSAGE_COLOR` is not provided!'
 fi
 
 if [ -z "$HIPCHAT_ERROR_FROMNAME" ] ; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_ERROR_FROMNAME` is not provided!*'
+  write_section_to_formatted_output '`$HIPCHAT_ERROR_FROMNAME` is not provided!'
 fi
 
 if [ -z "$HIPCHAT_ERROR_MESSAGE" ] ; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_ERROR_MESSAGE` is not provided!*'
+  write_section_to_formatted_output '`$HIPCHAT_ERROR_MESSAGE` is not provided!'
 fi
 
 # Build failed mode
