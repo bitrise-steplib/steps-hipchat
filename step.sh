@@ -51,8 +51,8 @@ fi
 # Curl params
 message="${HIPCHAT_MESSAGE}"
 if [[ "${isBuildFailedMode}" == "1" ]] ; then
-  if [ -n "$HIPCHAT_ERROR_FROMNAME" ] ; then
-    message="${HIPCHAT_ERROR_FROMNAME}"
+  if [ -n "$HIPCHAT_ERROR_MESSAGE" ] ; then
+    message="${HIPCHAT_ERROR_MESSAGE}"
   fi
 fi
 
