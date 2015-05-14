@@ -111,7 +111,7 @@ fi
 
 write_section_to_formatted_output "# Message successfully sent!"
 write_section_to_formatted_output "## From:"
-write_section_to_formatted_output "${HIPCHAT_FROMNAME}"
+write_section_to_formatted_output "${from_name}"
 write_section_to_formatted_output "## To Room:"
 write_section_to_formatted_output "${HIPCHAT_ROOMID}"
 write_section_to_formatted_output "## Message:"
