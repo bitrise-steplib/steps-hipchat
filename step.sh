@@ -109,18 +109,11 @@ if [[ "$err_search" != "" ]]; then
   exit 1
 fi
 
-if [[ "${isBuildFailedMode}" == "1" ]] ; then
-  write_section_to_formatted_output "# Message send failed!"
-  write_section_to_formatted_output "Error message:"
-  write_section_to_formatted_output "    ${message}"
-else
-  write_section_to_formatted_output "# Message successfully sent!"
-  write_section_to_formatted_output "## From:"
-  write_section_to_formatted_output "${HIPCHAT_FROMNAME}"
-  write_section_to_formatted_output "## To Room:"
-  write_section_to_formatted_output "${HIPCHAT_ROOMID}"
-  write_section_to_formatted_output "## Message:"
-  write_section_to_formatted_output "${message}"
-fi
-
+write_section_to_formatted_output "# Message successfully sent!"
+write_section_to_formatted_output "## From:"
+write_section_to_formatted_output "${HIPCHAT_FROMNAME}"
+write_section_to_formatted_output "## To Room:"
+write_section_to_formatted_output "${HIPCHAT_ROOMID}"
+write_section_to_formatted_output "## Message:"
+write_section_to_formatted_output "${message}"
 exit 0
