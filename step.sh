@@ -7,6 +7,30 @@ source "${THIS_SCRIPTDIR}/_bash_utils/formatted_output.sh"
 # init / cleanup the formatted output
 echo "" > "${formatted_output_file_path}"
 
+function write_error_section_to_foramtted_output {
+  error_message="$1"
+
+  echo "Failed"
+  write_section_to_formatted_output "# Message send failed!"
+  write_section_to_formatted_output "Error message:"
+  write_section_to_formatted_output "    ${error_message}"
+}
+
+function write_success_section_to_foramtted_output {
+  success_from_name="$1"
+  success_room_id="$2"
+  success_message="$3"
+
+  echo "Success"
+  write_section_to_formatted_output "# Message successfully sent!"
+  write_section_to_formatted_output "## From:"
+  write_section_to_formatted_output "     ${success_from_name}"
+  write_section_to_formatted_output "## To Room:"
+  write_section_to_formatted_output "     ${success_room_id}"
+  write_section_to_formatted_output "## Message:"
+  write_section_to_formatted_output "     ${success_message}"
+}
+
 # Input validation
 # - required
 if [  -z "$HIPCHAT_TOKEN" ] ; then
@@ -76,29 +100,6 @@ echo " * HIPCHAT_FROMNAME: $from_name"
 echo " * HIPCHAT_MESSAGE_COLOR: $msg_color"
 echo " * HIPCHAT_MESSAGE: $message"
 echo
-
-function write_error_section_to_foramtted_output {
-  error_message="$1"
-
-  echo "Failed"
-  write_section_to_formatted_output "# Message send failed!"
-  write_section_to_formatted_output "Error message:"
-  write_section_to_formatted_output "    ${error_message}"
-}
-
-function write_success_section_to_foramtted_output {
-  success_from_name="$1"
-  success_room_id="$2"
-  success_message="$3"
-
-  write_section_to_formatted_output "# Message successfully sent!"
-  write_section_to_formatted_output "## From:"
-  write_section_to_formatted_output "     ${from_name}"
-  write_section_to_formatted_output "## To Room:"
-  write_section_to_formatted_output "     ${HIPCHAT_ROOMID}"
-  write_section_to_formatted_output "## Message:"
-  write_section_to_formatted_output "     ${message}"
-}
 
 function urlencode {
   # urlencode <string>
