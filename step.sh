@@ -10,22 +10,22 @@ echo "" > "${formatted_output_file_path}"
 # Input validation
 # - required
 if [  -z "$HIPCHAT_TOKEN" ] ; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_TOKEN` is not provided!*'
+  write_error_section_to_foramtted_output '`$HIPCHAT_TOKEN` is not provided!*'
   exit 1
 fi
 
 if [ -z "$HIPCHAT_ROOMID" ] ; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_ROOMID` is not provided!*'
+  write_error_section_to_foramtted_output '`$HIPCHAT_ROOMID` is not provided!*'
   exit 1
 fi
 
 if [ -z "$HIPCHAT_FROMNAME" ] ; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_FROMNAME` is not provided!*'
+  write_error_section_to_foramtted_output '`$HIPCHAT_FROMNAME` is not provided!*'
   exit 1
 fi
 
 if [ -z "$HIPCHAT_MESSAGE" ] ; then
-  write_section_to_formatted_output '*Notice: `$HIPCHAT_MESSAGE` is not provided!*'
+  write_error_section_to_foramtted_output '`$HIPCHAT_MESSAGE` is not provided!*'
   exit 1
 fi
 
@@ -77,8 +77,30 @@ echo " * HIPCHAT_MESSAGE_COLOR: $msg_color"
 echo " * HIPCHAT_MESSAGE: $message"
 echo
 
+function write_error_section_to_foramtted_output {
+  error_message="$1"
 
-urlencode() {
+  echo "Failed"
+  write_section_to_formatted_output "# Message send failed!"
+  write_section_to_formatted_output "Error message:"
+  write_section_to_formatted_output "    ${error_message}"
+}
+
+function write_success_section_to_foramtted_output {
+  success_from_name="$1"
+  success_room_id="$2"
+  success_message="$3"
+
+  write_section_to_formatted_output "# Message successfully sent!"
+  write_section_to_formatted_output "## From:"
+  write_section_to_formatted_output "     ${from_name}"
+  write_section_to_formatted_output "## To Room:"
+  write_section_to_formatted_output "     ${HIPCHAT_ROOMID}"
+  write_section_to_formatted_output "## Message:"
+  write_section_to_formatted_output "     ${message}"
+}
+
+function urlencode {
   # urlencode <string>
   #  source: https://gist.github.com/cdown/1163649
 
@@ -102,18 +124,9 @@ echo "curl_response: $curl_response"
 err_search=$(echo $curl_response | grep error)
 
 if [[ "$err_search" != "" ]]; then
-  echo "Failed"
-  write_section_to_formatted_output "# Message send failed!"
-  write_section_to_formatted_output "Error message:"
-  write_section_to_formatted_output "    ${curl_response}"
+  write_error_section_to_foramtted_output "${curl_response}"
   exit 1
 fi
 
-write_section_to_formatted_output "# Message successfully sent!"
-write_section_to_formatted_output "## From:"
-write_section_to_formatted_output "     ${from_name}"
-write_section_to_formatted_output "## To Room:"
-write_section_to_formatted_output "     ${HIPCHAT_ROOMID}"
-write_section_to_formatted_output "## Message:"
-write_section_to_formatted_output "     ${message}"
+write_success_section_to_foramtted_output "${from_name}" "${HIPCHAT_ROOMID}" "${message}"
 exit 0
