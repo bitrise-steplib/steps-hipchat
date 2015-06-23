@@ -66,6 +66,26 @@ if [ -z "$HIPCHAT_ERROR_MESSAGE" ] ; then
   write_section_to_formatted_output '`$HIPCHAT_ERROR_MESSAGE` is not provided!'
 fi
 
+# Start go program
+
+resp=$(go run "${THIS_SCRIPTDIR}/step.go")
+ex_code=$?
+
+if [ ${ex_code} -eq 0 ] ; then
+  echo "${resp}"
+  write_section_to_formatted_output "# Success"
+  echo_string_to_formatted_output "Message successfully sent."
+  exit 0
+fi
+
+write_section_to_formatted_output "# Error"
+write_section_to_formatted_output "Sending the message failed with the following error:"
+echo_string_to_formatted_output "${resp}"
+exit 1
+
+# Stop go program
+
+'
 # Build failed mode
 isBuildFailedMode="0"
 if [ -n "$STEPLIB_BUILD_STATUS" ] ; then
@@ -131,3 +151,4 @@ fi
 
 write_success_section_to_foramtted_output "${from_name}" "${HIPCHAT_ROOMID}" "${message}"
 exit 0
+'
