@@ -15,7 +15,6 @@ import (
 const (
 	BASE_URL           = "https://api.hipchat.com/v1"
 	ResponseStatusSent = "sent"
-	Sample             = "csa"
 )
 
 var (
