@@ -1,10 +1,9 @@
 package markdownlog
 
 import (
+	"fmt"
 	"os"
 	"strings"
-
-	log "github.com/Sirupsen/logrus"
 )
 
 func ClearLogFile() error {
@@ -15,9 +14,9 @@ func ClearLogFile() error {
 			return err
 		}
 
-		log.Info("Log file cleared")
+		fmt.Println("Log file cleared")
 	} else {
-		log.Error("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
+		fmt.Errorf("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
 	}
 
 	return nil
@@ -41,12 +40,12 @@ func ErrorMessageToOutput(msg string) error {
 
 		f.Write([]byte(msg))
 	} else {
-		log.Errorln("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
+		fmt.Errorf("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
 	}
 
 	lines := strings.Split(msg, "\n")
 	for _, line := range lines {
-		log.Infoln(line)
+		fmt.Println(line)
 	}
 
 	return nil
@@ -82,12 +81,12 @@ func MessageToOutput(msg string) error {
 
 		f.Write([]byte(msg))
 	} else {
-		log.Error("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
+		fmt.Errorf("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
 	}
 
 	lines := strings.Split(msg, "\n")
 	for _, line := range lines {
-		log.Infoln(line)
+		fmt.Println(line)
 	}
 
 	return nil

@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"os"
 
-	log "./logrus"
 	"./markdownlog"
 )
 
@@ -131,7 +130,7 @@ func buildMessageRequest(isBuildFailedMode bool) MessageRequest {
 
 	if isBuildFailedMode {
 		if errorFromName == "" {
-			log.Infoln("Build failed, but no HIPCHAT_ERROR_FROMNAME defined, use default")
+			fmt.Println("Build failed, but no HIPCHAT_ERROR_FROMNAME defined, use default")
 		} else {
 			fromName = errorFromName
 		}
@@ -140,7 +139,7 @@ func buildMessageRequest(isBuildFailedMode bool) MessageRequest {
 
 	if isBuildFailedMode {
 		if errorMessage == "" {
-			log.Infoln("Build failed, but no HIPCHAT_ERROR_MESSAGE defined, use default")
+			fmt.Println("Build failed, but no HIPCHAT_ERROR_MESSAGE defined, use default")
 		} else {
 			message = errorMessage
 		}
@@ -176,7 +175,7 @@ func main() {
 	// init / cleanup the formatted output
 	err := markdownlog.ClearLogFile()
 	if err != nil {
-		log.Error("Failed to clear log file", err)
+		fmt.Errorf("Failed to clear log file", err)
 	}
 
 	// input validation
