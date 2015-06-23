@@ -3,16 +3,34 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
+
+	log "./logrus"
+	"./markdownlog"
 )
 
 const (
 	BASE_URL           = "https://api.hipchat.com/v1"
 	ResponseStatusSent = "sent"
+	Sample             = "csa"
+)
+
+var (
+	token string
+
+	roomId   string
+	fromName string
+	message  string
+
+	messageFormat string
+	notify        string
+	messageColor  string
+
+	errorFromName string
+	errorMessage  string
 )
 
 type MessageRequest struct {
@@ -109,12 +127,10 @@ func getError(body []byte) error {
 
 func buildMessageRequest(isBuildFailedMode bool) MessageRequest {
 	req := MessageRequest{
-		RoomId: os.Getenv("key"),
+		RoomId: roomId,
 	}
 
-	fromName := os.Getenv("HIPCHAT_FROMNAME")
 	if isBuildFailedMode {
-		errorFromName := os.Getenv("HIPCHAT_ERROR_FROMNAME")
 		if errorFromName == "" {
 			log.Infoln("Build failed, but no HIPCHAT_ERROR_FROMNAME defined, use default")
 		} else {
@@ -123,9 +139,7 @@ func buildMessageRequest(isBuildFailedMode bool) MessageRequest {
 	}
 	req.FromName = fromName
 
-	message := os.Getenv("HIPCHAT_MESSAGE")
 	if isBuildFailedMode {
-		errorMessage := os.Getenv("HIPCHAT_ERROR_MESSAGE")
 		if errorMessage == "" {
 			log.Infoln("Build failed, but no HIPCHAT_ERROR_MESSAGE defined, use default")
 		} else {
@@ -134,18 +148,84 @@ func buildMessageRequest(isBuildFailedMode bool) MessageRequest {
 	}
 	req.Message = message
 
-	req.MessageColor = os.Getenv("HIPCHAT_MESSAGE_COLOR")
+	req.MessageColor = messageColor
 
 	return req
 }
 
+func errorMessageToOutput(msg string) error {
+	message := "Message send failed!\n"
+	message = message + "Error message:\n"
+	message = message + msg
+
+	return markdownlog.ErrorSectionToOutput(message)
+}
+
+func successMessageToOutput(from, roomId, msg string) error {
+	message := "Message successfully sent!\n"
+	message = message + "From:\n"
+	message = message + from + "\n"
+	message = message + "To Romm:\n"
+	message = message + roomId + "\n"
+	message = message + "Message:\n"
+	message = message + msg
+
+	return markdownlog.SectionToOutput(message)
+}
+
 func main() {
+	// init / cleanup the formatted output
+	err := markdownlog.ClearLogFile()
+	if err != nil {
+		log.Error("Failed to clear log file", err)
+	}
+
+	// input validation
+	// required
+	token = os.Getenv("HIPCHAT_TOKEN")
+	if token == "" {
+		errorMessageToOutput("$HIPCHAT_TOKEN is not provided!")
+		os.Exit(1)
+	}
+	roomId = os.Getenv("HIPCHAT_ROOMID")
+	if roomId == "" {
+		errorMessageToOutput("$HIPCHAT_ROOMID is not provided!")
+		os.Exit(1)
+	}
+	fromName = os.Getenv("HIPCHAT_FROMNAME")
+	if fromName == "" {
+		errorMessageToOutput("$HIPCHAT_FROMNAME is not provided!")
+		os.Exit(1)
+	}
+	message = os.Getenv("HIPCHAT_MESSAGE")
+	if message == "" {
+		errorMessageToOutput("$HIPCHAT_MESSAGE is not provided!")
+		os.Exit(1)
+	}
+	//optional
+	messageColor = os.Getenv("HIPCHAT_MESSAGE_COLOR")
+	if messageColor == "" {
+		markdownlog.SectionToOutput("$HIPCHAT_MESSAGE_COLOR is not provided!")
+	}
+	errorFromName = os.Getenv("HIPCHAT_ERROR_FROMNAME")
+	if errorFromName == "" {
+		markdownlog.SectionToOutput("$HIPCHAT_ERROR_FROMNAME is not provided!")
+	}
+	errorMessage = os.Getenv("HIPCHAT_ERROR_MESSAGE")
+	if errorMessage == "" {
+		markdownlog.SectionToOutput("$HIPCHAT_ERROR_MESSAGE is not provided!")
+	}
+
+	// perform step
 	isBuildFailedMode := (os.Getenv("STEPLIB_BUILD_STATUS") != "0")
 	req := buildMessageRequest(isBuildFailedMode)
 
 	token := os.Getenv("HIPCHAT_TOKEN")
 	c := NewClient(token)
 	if err := c.PostMessage(req); err != nil {
-		log.Printf("Expected no error, but got %q", err)
+		errorMessageToOutput(err.Error())
+		os.Exit(1)
 	}
+
+	successMessageToOutput(req.FromName, req.RoomId, req.Message)
 }

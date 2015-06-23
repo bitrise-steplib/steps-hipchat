@@ -1,8 +1,12 @@
 {
 	"deps": [
 		{
-			"url": "https://github.com/bitrise-io/steps-utils-bash-toolkit.git",
-			"store_path": "_bash_utils"
+			"url": "https://github.com/gkiki90/go-markdown-log.git",
+			"store_path": "markdownlog"
+		},
+		{
+			"url": "https://github.com/Sirupsen/logrus.git",
+			"store_path": "logrus"
 		}
 	]
 }

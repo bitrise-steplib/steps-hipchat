@@ -1,8 +1,12 @@
 {
 	"dep_locks": [
 		{
-			"url": "https://github.com/bitrise-io/steps-utils-bash-toolkit.git",
-			"revision": "1e3af9647d8ae5f1c48b2eb0549a06c71f9defad"
+			"url": "https://github.com/gkiki90/go-markdown-log.git",
+			"revision": "472fa6fe1b5f73bbbb6e1b0e079d3ab47baf63ab"
+		},
+		{
+			"url": "https://github.com/Sirupsen/logrus.git",
+			"revision": "2a0a9a12ae2892ccfa9ab59c1222e9dcd29f9367"
 		}
 	]
 }
