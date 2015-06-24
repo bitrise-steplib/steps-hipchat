@@ -6,8 +6,13 @@ import (
 	"strings"
 )
 
+var pth string
+
+func Setup(logPath string) {
+	pth = logPath
+}
+
 func ClearLogFile() error {
-	pth := os.Getenv("BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH")
 	if pth != "" {
 		err := os.Remove(pth)
 		if err != nil {
@@ -16,14 +21,13 @@ func ClearLogFile() error {
 
 		fmt.Println("Log file cleared")
 	} else {
-		fmt.Errorf("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
+		fmt.Errorf("No log path defined!")
 	}
 
 	return nil
 }
 
 func ErrorMessageToOutput(msg string) error {
-	pth := os.Getenv("BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH")
 	if pth != "" {
 		f, err := os.OpenFile(pth, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if err != nil {
@@ -40,7 +44,7 @@ func ErrorMessageToOutput(msg string) error {
 
 		f.Write([]byte(msg))
 	} else {
-		fmt.Errorf("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
+		fmt.Errorf("No log path defined!")
 	}
 
 	lines := strings.Split(msg, "\n")
@@ -64,7 +68,6 @@ func ErrorSectionStartToOutput(section string) error {
 }
 
 func MessageToOutput(msg string) error {
-	pth := os.Getenv("BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH")
 	if pth != "" {
 		f, err := os.OpenFile(pth, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
 		if err != nil {
@@ -81,7 +84,7 @@ func MessageToOutput(msg string) error {
 
 		f.Write([]byte(msg))
 	} else {
-		fmt.Errorf("No BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH defined")
+		fmt.Errorf("No log path defined!")
 	}
 
 	lines := strings.Split(msg, "\n")

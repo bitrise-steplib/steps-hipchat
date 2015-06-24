@@ -173,6 +173,8 @@ func successMessageToOutput(from, roomId, msg string) error {
 
 func main() {
 	// init / cleanup the formatted output
+	pth := os.Getenv("BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH")
+	markdownlog.Setup(pth)
 	err := markdownlog.ClearLogFile()
 	if err != nil {
 		fmt.Errorf("Failed to clear log file", err)
@@ -217,8 +219,6 @@ func main() {
 	// perform step
 	isBuildFailedMode := (os.Getenv("STEPLIB_BUILD_STATUS") != "0")
 	req := buildMessageRequest(isBuildFailedMode)
-
-	token := os.Getenv("HIPCHAT_TOKEN")
 	c := NewClient(token)
 	if err := c.PostMessage(req); err != nil {
 		errorMessageToOutput(err.Error())
