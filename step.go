@@ -81,6 +81,10 @@ func main() {
 	if errorMessage == "" {
 		markdownlog.SectionToOutput("$HIPCHAT_ERROR_MESSAGE is not provided!")
 	}
+	errorMessageColor := os.Getenv("HIPCHAT_ERROR_MESSAGE_COLOR")
+	if errorMessageColor == "" {
+		markdownlog.SectionToOutput("$HIPCHAT_ERROR_MESSAGE_COLOR is not provided, use default!")
+	}
 
 	isBuildFailedMode := (os.Getenv("STEPLIB_BUILD_STATUS") != "0")
 	if isBuildFailedMode {
@@ -93,6 +97,11 @@ func main() {
 			fmt.Errorf("Build failed, but no HIPCHAT_ERROR_MESSAGE defined, use default")
 		} else {
 			message = errorMessage
+		}
+		if errorMessageColor == "" {
+			fmt.Errorf("Build failed, but no HIPCHAT_ERROR_MESSAGE_COLOR defined, use default")
+		} else {
+			messageColor = errorMessageColor
 		}
 	}
 
@@ -110,7 +119,7 @@ func main() {
 
 	request, err := http.NewRequest("POST", url, &valuesReader)
 	if err != nil {
-		fmt.Println("Failed to create requestuest:", err)
+		fmt.Println("Failed to create request:", err)
 		os.Exit(1)
 	}
 
