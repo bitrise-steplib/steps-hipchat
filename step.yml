@@ -75,4 +75,20 @@ inputs:
     value: yellow
     is_expand: false
     is_required: false
+  - 
+    mapped_to: HIPCHAT_ERROR_MESSAGE_COLOR
+    title: "Message Color - if the build failed"
+    description: |
+      **This option will be used if the build failed.** If you
+      leave this option empty then the default one will be used.
+    value_options:
+      - yellow
+      - red
+      - green
+      - purple
+      - gray
+      - random
+    value: red
+    is_expand: false
+    is_required: false
 
