@@ -1,0 +1,26 @@
+format_version: 0.9.10
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+
+app:
+  envs:
+  # define these in your .bitrise.secrets.yml
+  - auth_token:
+  - room_id:
+
+workflows:
+  test:
+    steps:
+    - path::./:
+        title: On Success
+        inputs:
+        - from_name: Bitrise CI
+        - message: First, On Success test
+    - script:
+        title: Fail
+        inputs:
+        - content: exit 1
+    - path::./:
+        title: On Error
+        inputs:
+        - from_name_on_error: step-dev-test2
+        - message_on_error: On Error test

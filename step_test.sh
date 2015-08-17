@@ -84,8 +84,8 @@ function is_not_empty {
 }
 
 function test_env_cleanup {
-  unset HIPCHAT_TOKEN
-  unset HIPCHAT_ROOMID
+  unset auth_token
+  unset room_id
 }
 
 function print_new_test {
@@ -107,7 +107,7 @@ test_results_success_count=0
 test_results_error_count=0
 
 
-# [TEST] Call the command with HIPCHAT_TOKEN not set, 
+# [TEST] Call the command with auth_token not set, 
 # it should raise an error message and exit
 # 
 (
@@ -115,11 +115,11 @@ test_results_error_count=0
   test_env_cleanup
 
   # Set env vars
-  export HIPCHAT_ROOMID="dsa4321"
+  export room_id="dsa4321"
 
-  # HIPCHAT_TOKEN should NOT exist
-  expect_error "HIPCHAT_TOKEN environment variable should NOT be set" is_not_empty "$HIPCHAT_TOKEN"
-  expect_success "HIPCHAT_ROOMID environment variable should be set" is_not_empty "$HIPCHAT_ROOMID"
+  # auth_token should NOT exist
+  expect_error "auth_token environment variable should NOT be set" is_not_empty "$auth_token"
+  expect_success "room_id environment variable should be set" is_not_empty "$room_id"
 
   # Deploy the file
   expect_error "The command should be called, but should not complete sucessfully" run_target_command  
@@ -128,7 +128,7 @@ test_result=$?
 inspect_test_result $test_result
 
 
-# [TEST] Call the command with HIPCHAT_ROOMID not set, 
+# [TEST] Call the command with room_id not set, 
 # it should raise an error message and exit
 # 
 (
@@ -136,11 +136,11 @@ inspect_test_result $test_result
   test_env_cleanup
 
   # Set env vars
-  export HIPCHAT_TOKEN="asd1234"
+  export auth_token="asd1234"
 
-  # HIPCHAT_ROOMID should NOT exist
-  expect_error "HIPCHAT_ROOMID environment variable should NOT be set" is_not_empty "$HIPCHAT_ROOMID"
-  expect_success "HIPCHAT_TOKEN environment variable should be set" is_not_empty "$HIPCHAT_TOKEN"
+  # room_id should NOT exist
+  expect_error "room_id environment variable should NOT be set" is_not_empty "$room_id"
+  expect_success "auth_token environment variable should be set" is_not_empty "$auth_token"
 
   # Deploy the file
   expect_error "The command should be called, but should not complete sucessfully" run_target_command 

@@ -47,59 +47,59 @@ func main() {
 	}
 
 	// required inputs
-	token := os.Getenv("HIPCHAT_TOKEN")
+	token := os.Getenv("auth_token")
 	if token == "" {
-		errorMessageToOutput("$HIPCHAT_TOKEN is not provided!")
+		errorMessageToOutput("$auth_token is not provided!")
 		os.Exit(1)
 	}
-	roomId := os.Getenv("HIPCHAT_ROOMID")
+	roomId := os.Getenv("room_id")
 	if roomId == "" {
-		errorMessageToOutput("$HIPCHAT_ROOMID is not provided!")
+		errorMessageToOutput("$room_id is not provided!")
 		os.Exit(1)
 	}
-	fromName := os.Getenv("HIPCHAT_FROMNAME")
+	fromName := os.Getenv("from_name")
 	if fromName == "" {
-		errorMessageToOutput("$HIPCHAT_FROMNAME is not provided!")
+		errorMessageToOutput("$from_name is not provided!")
 		os.Exit(1)
 	}
-	message := os.Getenv("HIPCHAT_MESSAGE")
+	message := os.Getenv("message")
 	if message == "" {
-		errorMessageToOutput("$HIPCHAT_MESSAGE is not provided!")
+		errorMessageToOutput("$message is not provided!")
 		os.Exit(1)
 	}
 	//optional inputs
-	messageColor := os.Getenv("HIPCHAT_MESSAGE_COLOR")
+	messageColor := os.Getenv("color")
 	if messageColor == "" {
-		markdownlog.SectionToOutput("$HIPCHAT_MESSAGE_COLOR is not provided, use default!")
+		markdownlog.SectionToOutput("$color is not provided, use default!")
 		messageColor = "yellow"
 	}
-	errorFromName := os.Getenv("HIPCHAT_ERROR_FROMNAME")
+	errorFromName := os.Getenv("from_name_on_error")
 	if errorFromName == "" {
-		markdownlog.SectionToOutput("$HIPCHAT_ERROR_FROMNAME is not provided!")
+		markdownlog.SectionToOutput("$from_name_on_error is not provided!")
 	}
-	errorMessage := os.Getenv("HIPCHAT_ERROR_MESSAGE")
+	errorMessage := os.Getenv("message_on_error")
 	if errorMessage == "" {
-		markdownlog.SectionToOutput("$HIPCHAT_ERROR_MESSAGE is not provided!")
+		markdownlog.SectionToOutput("$message_on_error is not provided!")
 	}
-	errorMessageColor := os.Getenv("HIPCHAT_ERROR_MESSAGE_COLOR")
+	errorMessageColor := os.Getenv("color_on_error")
 	if errorMessageColor == "" {
-		markdownlog.SectionToOutput("$HIPCHAT_ERROR_MESSAGE_COLOR is not provided, use default!")
+		markdownlog.SectionToOutput("$color_on_error is not provided, use default!")
 	}
 
 	isBuildFailedMode := (os.Getenv("STEPLIB_BUILD_STATUS") != "0")
 	if isBuildFailedMode {
 		if errorFromName == "" {
-			fmt.Errorf("Build failed, but no HIPCHAT_ERROR_FROMNAME defined, use default")
+			fmt.Errorf("Build failed, but no from_name_on_error defined, use default")
 		} else {
 			fromName = errorFromName
 		}
 		if errorMessage == "" {
-			fmt.Errorf("Build failed, but no HIPCHAT_ERROR_MESSAGE defined, use default")
+			fmt.Errorf("Build failed, but no message_on_error defined, use default")
 		} else {
 			message = errorMessage
 		}
 		if errorMessageColor == "" {
-			fmt.Errorf("Build failed, but no HIPCHAT_ERROR_MESSAGE_COLOR defined, use default")
+			fmt.Errorf("Build failed, but no color_on_error defined, use default")
 		} else {
 			messageColor = errorMessageColor
 		}
