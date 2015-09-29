@@ -1,6 +1,10 @@
 title: Send HipChat message
-summary: Send a [HipChat](https://www.hipchat.com) message to a room.
-description: |
+summary: |-
+  Why bother sending a “done” or "." message to the HipChat room to notify your
+  team members that the build / deploy finished with success when Bitrise can
+  do it for you? Simply add the HipChat Step to your Workflow. And also you can
+  change the color of the message to make the chat a bit more hip.
+description: |-
   Send a [HipChat](https://www.hipchat.com) message to a room.
 
   **This Step requires a HipChat account.**
