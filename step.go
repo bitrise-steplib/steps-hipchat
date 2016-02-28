@@ -31,6 +31,7 @@ func successMessageToOutput(from, roomId, msg string) error {
 	message = message + from + "\n"
 	message = message + "To Romm:\n"
 	message = message + roomId + "\n"
+	message = message + messageFormat + "\n"
 	message = message + "Message:\n"
 	message = message + msg
 
