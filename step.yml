@@ -57,11 +57,27 @@ inputs:
         *max 15 characters*
       is_expand: true
       is_required: false
+  - message_format: html
+    opts:
+      title: Message Format
+      value_options:
+        - html
+        - text
+      is_expand: true
+      is_required: false
   - message:
     opts:
       title: "The message you want to send"
       is_expand: true
       is_required: true
+  - message_on_error_format: html
+    opts:
+      title: Message On Error Format
+      value_options:
+        - html
+        - text
+      is_expand: true
+      is_required: false
   - message_on_error:
     opts:
       title: "The message you want to send - if the build failed"
