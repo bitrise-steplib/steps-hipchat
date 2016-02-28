@@ -59,7 +59,7 @@ inputs:
       is_required: false
   - message_format: html
     opts:
-      title: Message Format
+      title: "The message format you want to set"
       value_options:
         - html
         - text
@@ -72,7 +72,10 @@ inputs:
       is_required: true
   - message_on_error_format: html
     opts:
-      title: Message On Error Format
+      title: "The message format you want to set - if the build failed"
+      description: |
+        **This option will be used if the build failed.** If you
+        leave this option empty then the default one will be used.
       value_options:
         - html
         - text
