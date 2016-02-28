@@ -31,6 +31,7 @@ func successMessageToOutput(from, roomId, msg string) error {
 	message = message + from + "\n"
 	message = message + "To Romm:\n"
 	message = message + roomId + "\n"
+	message = message + messageFormat + "\n"
 	message = message + "Message:\n"
 	message = message + msg
 
@@ -68,6 +69,11 @@ func main() {
 		os.Exit(1)
 	}
 	//optional inputs
+	messageFormat := os.Getenv("message_format")
+	if messageFormat == "" {
+		markdownlog.SectionToOutput("$message_format is not provided, use default - html!")
+		messageFormat = "html"
+	}
 	messageColor := os.Getenv("color")
 	if messageColor == "" {
 		markdownlog.SectionToOutput("$color is not provided, use default!")
@@ -80,6 +86,11 @@ func main() {
 	errorMessage := os.Getenv("message_on_error")
 	if errorMessage == "" {
 		markdownlog.SectionToOutput("$message_on_error is not provided!")
+	}
+	errorMessageFormat := os.Getenv("message_on_error_format")
+	if errorMessageFormat == "" {
+		markdownlog.SectionToOutput("$message_on_error_format is not provided, use default - html!")
+		errorMessageFormat = "html"
 	}
 	errorMessageColor := os.Getenv("color_on_error")
 	if errorMessageColor == "" {
@@ -98,6 +109,11 @@ func main() {
 		} else {
 			message = errorMessage
 		}
+		if errorMessageFormat == "" {
+			fmt.Errorf("Build failed, but no message_format_on_error defined, use default")
+		} else {
+			messageFormat = errorMessageFormat
+		}
 		if errorMessageColor == "" {
 			fmt.Errorf("Build failed, but no color_on_error defined, use default")
 		} else {
@@ -111,6 +127,7 @@ func main() {
 		"from":    {fromName},
 		"message": {message},
 		"color":   {messageColor},
+		"message_format": {messageFormat}
 	}
 	valuesReader := *strings.NewReader(values.Encode())
 
