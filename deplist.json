@@ -1,8 +1,0 @@
-{
-	"deps": [
-		{
-			"url": "https://github.com/gkiki90/go-markdown-log.git",
-			"store_path": "markdownlog"
-		}
-	]
-}

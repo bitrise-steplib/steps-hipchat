@@ -1,147 +1,175 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
 	"strings"
-
-	"./markdownlog"
 )
+
+// -----------------------
+// --- Constants
+// -----------------------
 
 const (
-	BASE_URL             = "https://api.hipchat.com/v1"
-	RESPONSE_STATUS_SENT = "sent"
+	baseURL = "https://api.hipchat.com/v1"
 )
 
-func errorMessageToOutput(msg string) error {
-	message := "Message send failed!\n"
-	message = message + "Error message:\n"
-	message = message + msg
+// -----------------------
+// --- Functions
+// -----------------------
 
-	return markdownlog.ErrorSectionToOutput(message)
+func logFail(format string, v ...interface{}) {
+	errorMsg := fmt.Sprintf(format, v...)
+	fmt.Printf("\x1b[31;1m%s\x1b[0m\n", errorMsg)
+	os.Exit(1)
 }
 
-func successMessageToOutput(from, roomId, msg string) error {
-	message := "Message successfully sent!\n"
-	message = message + "From:\n"
-	message = message + from + "\n"
-	message = message + "To Romm:\n"
-	message = message + roomId + "\n"
-	message = message + "Message:\n"
-	message = message + msg
-
-	return markdownlog.SectionToOutput(message)
+func logWarn(format string, v ...interface{}) {
+	errorMsg := fmt.Sprintf(format, v...)
+	fmt.Printf("\x1b[33;1m%s\x1b[0m\n", errorMsg)
 }
+
+func logInfo(format string, v ...interface{}) {
+	fmt.Println()
+	errorMsg := fmt.Sprintf(format, v...)
+	fmt.Printf("\x1b[34;1m%s\x1b[0m\n", errorMsg)
+}
+
+func logDetails(format string, v ...interface{}) {
+	errorMsg := fmt.Sprintf(format, v...)
+	fmt.Printf("  %s\n", errorMsg)
+}
+
+func logDone(format string, v ...interface{}) {
+	errorMsg := fmt.Sprintf(format, v...)
+	fmt.Printf("  \x1b[32;1m%s\x1b[0m\n", errorMsg)
+}
+
+func validateRequiredInput(key string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		logFail("missing required input: %s", key)
+	}
+	return value
+}
+
+func validateInput(key, defaultValue string) string {
+	value := os.Getenv(key)
+	if value == "" {
+		logWarn("%s input not provided, use default!", key)
+		return defaultValue
+	}
+	return value
+}
+
+func printConfig(roomID, fromName, message, color, fromNameOnError, messageOnError, colorOnError, messageFormat string) {
+	logInfo("Configs:")
+	logDetails("token: ***")
+	logDetails("romm_id: %s", roomID)
+	logDetails("from_name: %s", fromName)
+	logDetails("color: %s", color)
+	logDetails("message: %s", message)
+	logDetails("from_name_on_error: %s", fromNameOnError)
+	logDetails("message_on_error: %s", messageOnError)
+	logDetails("color_on_error: %s", colorOnError)
+	logDetails("message_format: %s", messageFormat)
+}
+
+// -----------------------
+// --- Main
+// -----------------------
 
 func main() {
-	// init / cleanup the formatted output
-	pth := os.Getenv("BITRISE_STEP_FORMATTED_OUTPUT_FILE_PATH")
-	markdownlog.Setup(pth)
-	err := markdownlog.ClearLogFile()
-	if err != nil {
-		fmt.Errorf("Failed to clear log file", err)
-	}
+	//
+	// Validate options
+	token := validateRequiredInput("auth_token")
+	roomID := validateRequiredInput("room_id")
+	fromName := validateRequiredInput("from_name")
+	message := validateRequiredInput("message")
 
-	// required inputs
-	token := os.Getenv("auth_token")
-	if token == "" {
-		errorMessageToOutput("$auth_token is not provided!")
-		os.Exit(1)
-	}
-	roomId := os.Getenv("room_id")
-	if roomId == "" {
-		errorMessageToOutput("$room_id is not provided!")
-		os.Exit(1)
-	}
-	fromName := os.Getenv("from_name")
-	if fromName == "" {
-		errorMessageToOutput("$from_name is not provided!")
-		os.Exit(1)
-	}
-	message := os.Getenv("message")
-	if message == "" {
-		errorMessageToOutput("$message is not provided!")
-		os.Exit(1)
-	}
 	//optional inputs
-	messageColor := os.Getenv("color")
-	if messageColor == "" {
-		markdownlog.SectionToOutput("$color is not provided, use default!")
-		messageColor = "yellow"
-	}
-	errorFromName := os.Getenv("from_name_on_error")
-	if errorFromName == "" {
-		markdownlog.SectionToOutput("$from_name_on_error is not provided!")
-	}
-	errorMessage := os.Getenv("message_on_error")
-	if errorMessage == "" {
-		markdownlog.SectionToOutput("$message_on_error is not provided!")
-	}
-	errorMessageColor := os.Getenv("color_on_error")
-	if errorMessageColor == "" {
-		markdownlog.SectionToOutput("$color_on_error is not provided, use default!")
-	}
+	messageColor := validateInput("color", "yellow")
+
+	errorFromName := validateInput("from_name_on_error", fromName)
+	errorMessage := validateInput("message_on_error", message)
+	errorMessageColor := validateInput("color_on_error", messageColor)
+
+	messageFormat := validateInput("message_format", "text")
 
 	isBuildFailedMode := (os.Getenv("STEPLIB_BUILD_STATUS") != "0")
 	if isBuildFailedMode {
-		if errorFromName == "" {
-			fmt.Errorf("Build failed, but no from_name_on_error defined, use default")
-		} else {
-			fromName = errorFromName
-		}
-		if errorMessage == "" {
-			fmt.Errorf("Build failed, but no message_on_error defined, use default")
-		} else {
-			message = errorMessage
-		}
-		if errorMessageColor == "" {
-			fmt.Errorf("Build failed, but no color_on_error defined, use default")
-		} else {
-			messageColor = errorMessageColor
-		}
+		fromName = errorFromName
+		message = errorMessage
+		messageColor = errorMessageColor
 	}
 
-	// request payload
+	printConfig(roomID, fromName, message, messageColor, errorFromName, errorMessage, errorMessageColor, messageFormat)
+
+	//
+	// Create request
+	logInfo("Performing request")
+
 	values := url.Values{
-		"room_id": {roomId},
-		"from":    {fromName},
-		"message": {message},
-		"color":   {messageColor},
+		"room_id":        {roomID},
+		"from":           {fromName},
+		"message":        {message},
+		"color":          {messageColor},
+		"message_format": {messageFormat},
 	}
 	valuesReader := *strings.NewReader(values.Encode())
 
-	// request
-	url := BASE_URL + "/rooms/message?auth_token=" + token
+	url := baseURL + "/rooms/message?auth_token=" + token
 
 	request, err := http.NewRequest("POST", url, &valuesReader)
 	if err != nil {
-		fmt.Println("Failed to create request:", err)
-		os.Exit(1)
+		logFail("Failed to create request, error: %s", err)
 	}
-
 	request.Header.Add("Accept", "application/json")
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
-	// perform request
 	client := &http.Client{}
-	response, err := client.Do(request)
-	if response.StatusCode == 200 {
-		successMessageToOutput(fromName, roomId, message)
-	} else {
-		var data map[string]interface{}
-		bodyBytes, _ := ioutil.ReadAll(response.Body)
-		err := json.Unmarshal(bodyBytes, &data)
-		if err == nil {
-			fmt.Println("Response:", data)
+	response, requestErr := client.Do(request)
+
+	defer response.Body.Close()
+	contents, readErr := ioutil.ReadAll(response.Body)
+
+	//
+	// Process response
+
+	// Error
+	if requestErr != nil {
+		if readErr != nil {
+			logWarn("Failed to read response body, error: %#v", readErr)
+		} else {
+			logInfo("Response:")
+			logDetails("status code: %d", response.StatusCode)
+			logDetails("body: %s", string(contents))
 		}
+		logFail("Performing request failed, error: %#v", requestErr)
+	}
 
-		errorMsg := fmt.Sprintf("Status code: %s Body: %s", response.StatusCode, response.Body)
-		errorMessageToOutput(errorMsg)
+	if response.StatusCode < 200 || response.StatusCode > 300 {
+		if readErr != nil {
+			logWarn("Failed to read response body, error: %#v", readErr)
+		} else {
+			logInfo("Response:")
+			logDetails("status code: %d", response.StatusCode)
+			logDetails("body: %s", string(contents))
+		}
+		logFail("Performing request failed, status code: %d", response.StatusCode)
+	}
 
-		os.Exit(1)
+	// Success
+	logDone("Request succed")
+
+	logInfo("Response:")
+	logDetails("status code: %d", response.StatusCode)
+	logDetails("body: %s", contents)
+
+	if readErr != nil {
+		logFail("Failed to read response body, error: %#v", readErr)
 	}
 }
