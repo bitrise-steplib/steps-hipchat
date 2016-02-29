@@ -52,7 +52,7 @@ inputs:
         leave this option empty then the default one will be use.
 
         *max 15 characters*
-  - message: "Bitrise workflow run succed"
+  - message: "Bitrise workflow run succeeded"
     opts:
       title: "The message you want to send"
       is_required: true
