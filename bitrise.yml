@@ -17,8 +17,7 @@ workflows:
         inputs:
         - auth_token: $auth_token
         - room_id: $room_id
-        - from_name: Bitrise succed
-        - message: On Success test
+        - message: <a href="http://www.w3schools.com">Visit W3Schools</a>
     - script:
         title: Fail
         inputs:
@@ -28,8 +27,6 @@ workflows:
         inputs:
         - auth_token: $auth_token
         - room_id: $room_id
-        - from_name: Bitrise failed
-        - message: On Failed test
 
   # ----------------------------------------------------------------
   # --- workflow to Release a new version with auto version bump
