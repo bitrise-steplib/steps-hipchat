@@ -1,6 +1,12 @@
-## Changelog (Current version: 3.0.1)
+## Changelog (Current version: 3.0.2)
 
 -----------------
+
+### 3.0.2 (2016 Feb 29)
+
+* [7d747a8] Merge pull request #13 from bitrise-io/develop
+* [b5ee8a2] typo fix
+* [9a0c3f0] v3.0.1
 
 ### 3.0.1 (2016 Feb 29)
 
