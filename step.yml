@@ -29,14 +29,12 @@ inputs:
       title: HipChat Auth Token
       description: |
         This Step uses HipChat API v1, you can register a v1 API Token at [https://www.hipchat.com/admin/api](https://www.hipchat.com/admin/api).
-      is_expand: true
       is_required: true
   - room_id:
     opts:
       title: HipChat RoomID
       description: |
         You can get the *room id* of any HipChat room by selecting *Rooms > Summary > API ID*.
-      is_expand: true
       is_required: true
   - from_name: Bitrise CI
     opts:
@@ -45,7 +43,6 @@ inputs:
         The one which should be presented as the sender of the message.
 
         *max 15 characters*
-      is_expand: true
       is_required: true
   - from_name_on_error:
     opts:
@@ -55,12 +52,9 @@ inputs:
         leave this option empty then the default one will be use.
 
         *max 15 characters*
-      is_expand: true
-      is_required: false
   - message:
     opts:
       title: "The message you want to send"
-      is_expand: true
       is_required: true
   - message_on_error:
     opts:
@@ -68,8 +62,6 @@ inputs:
       description: |
         **This option will be used if the build failed.** If you
         leave this option empty then the default one will be used.
-      is_expand: true
-      is_required: false
   - color: green
     opts:
       title: Message Color
@@ -80,8 +72,6 @@ inputs:
         - purple
         - gray
         - random
-      is_expand: true
-      is_required: false
   - color_on_error: red
     opts:
       title: "Message Color - if the build failed"
@@ -95,5 +85,9 @@ inputs:
         - purple
         - gray
         - random
-      is_expand: true
-      is_required: false
+  - message_format: html
+    opts:
+     title: "The message format you want to set"
+     value_options:
+       - html
+       - text
