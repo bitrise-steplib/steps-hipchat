@@ -7,6 +7,8 @@ import (
 	"net/url"
 	"os"
 	"strings"
+
+	"github.com/bitrise-io/go-utils/log"
 )
 
 // -----------------------
@@ -66,16 +68,16 @@ func validateInput(key, defaultValue string) string {
 }
 
 func printConfig(roomID, fromName, message, color, fromNameOnError, messageOnError, colorOnError, messageFormat string) {
-	logInfo("Configs:")
-	logDetails("token: ***")
-	logDetails("romm_id: %s", roomID)
-	logDetails("from_name: %s", fromName)
-	logDetails("color: %s", color)
-	logDetails("message: %s", message)
-	logDetails("from_name_on_error: %s", fromNameOnError)
-	logDetails("message_on_error: %s", messageOnError)
-	logDetails("color_on_error: %s", colorOnError)
-	logDetails("message_format: %s", messageFormat)
+	log.Infof("Configs:")
+	log.Printf("token: ***")
+	log.Printf("romm_id: %s", roomID)
+	log.Printf("from_name: %s", fromName)
+	log.Printf("color: %s", color)
+	log.Printf("message: %s", message)
+	log.Printf("from_name_on_error: %s", fromNameOnError)
+	log.Printf("message_on_error: %s", messageOnError)
+	log.Printf("color_on_error: %s", colorOnError)
+	log.Printf("message_format: %s", messageFormat)
 }
 
 // -----------------------
@@ -105,6 +107,8 @@ func main() {
 		message = errorMessage
 		messageColor = errorMessageColor
 	}
+
+	fmt.Println()
 
 	printConfig(roomID, fromName, message, messageColor, errorFromName, errorMessage, errorMessageColor, messageFormat)
 
