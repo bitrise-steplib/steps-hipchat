@@ -14,70 +14,68 @@ import (
 // -----------------------
 // --- Constants
 // -----------------------
-
 const (
 	baseURL = "https://api.hipchat.com/v1"
 )
+
+// ConfigsModel ...
+type ConfigsModel struct {
+	//oAuth
+	token  string
+	roomID string
+
+	//onSuccess
+	fromName     string
+	message      string
+	messageColor string
+
+	//onFail
+	fromNameOnError     string
+	messageOnError      string
+	messageColorOnError string
+
+	//settings
+	messageFormat     string
+	isBuildFailedMode string
+}
 
 // -----------------------
 // --- Functions
 // -----------------------
 
-func logFail(format string, v ...interface{}) {
-	errorMsg := fmt.Sprintf(format, v...)
-	fmt.Printf("\x1b[31;1m%s\x1b[0m\n", errorMsg)
-	os.Exit(1)
-}
+func createConfigsModelFromEnvs() ConfigsModel {
+	return ConfigsModel{
+		token:  os.Getenv("auth_token"),
+		roomID: os.Getenv("room_id"),
 
-func logWarn(format string, v ...interface{}) {
-	errorMsg := fmt.Sprintf(format, v...)
-	fmt.Printf("\x1b[33;1m%s\x1b[0m\n", errorMsg)
-}
+		fromName:     os.Getenv("from_name"),
+		message:      os.Getenv("message"),
+		messageColor: os.Getenv("message_color"),
 
-func logInfo(format string, v ...interface{}) {
-	fmt.Println()
-	errorMsg := fmt.Sprintf(format, v...)
-	fmt.Printf("\x1b[34;1m%s\x1b[0m\n", errorMsg)
-}
+		fromNameOnError:     os.Getenv("from_name_on_error"),
+		messageOnError:      os.Getenv("message_on_error"),
+		messageColorOnError: os.Getenv("message_color_on_error"),
 
-func logDetails(format string, v ...interface{}) {
-	errorMsg := fmt.Sprintf(format, v...)
-	fmt.Printf("  %s\n", errorMsg)
-}
-
-func logDone(format string, v ...interface{}) {
-	errorMsg := fmt.Sprintf(format, v...)
-	fmt.Printf("  \x1b[32;1m%s\x1b[0m\n", errorMsg)
-}
-
-func validateRequiredInput(key string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		logFail("missing required input: %s", key)
+		messageFormat:     os.Getenv("message_format"),
+		isBuildFailedMode: os.Getenv("STEPLIB_BUILD_STATUS"),
 	}
-	return value
 }
 
-func validateInput(key, defaultValue string) string {
-	value := os.Getenv(key)
-	if value == "" {
-		logWarn("%s input not provided, use default!", key)
-		return defaultValue
-	}
-	return value
-}
-
-func printConfig(roomID, fromName, message, color, fromNameOnError, messageOnError, colorOnError, messageFormat string) {
+func (configs ConfigsModel) print() {
 	log.Infof("Configs:")
-	log.Printf("token: ***")
-	log.Printf("romm_id: %s", roomID)
-	log.Printf("from_name: %s", fromName)
-	log.Printf("color: %s", color)
-	log.Printf("message: %s", message)
-	log.Printf("from_name_on_error: %s", fromNameOnError)
-	log.Printf("message_on_error: %s", messageOnError)
-	log.Printf("color_on_error: %s", colorOnError)
-	log.Printf("message_format: %s", messageFormat)
+
+	log.Printf("- token: %s", "***")
+	log.Printf("- roomID: %s", configs.roomID)
+
+	log.Printf("- fromName: %s", configs.fromName)
+	log.Printf("- message: %s", configs.message)
+	log.Printf("- messageColor: %s", configs.messageColor)
+
+	log.Printf("- fromNameOnError: %s", configs.fromNameOnError)
+	log.Printf("- messageOnError: %s", configs.messageOnError)
+	log.Printf("- messageColorOnError: %s", configs.messageColorOnError)
+
+	log.Printf("- messageFormat: %s", configs.messageFormat)
 }
 
 // -----------------------
@@ -85,59 +83,54 @@ func printConfig(roomID, fromName, message, color, fromNameOnError, messageOnErr
 // -----------------------
 
 func main() {
-	//
-	// Validate options
-	token := validateRequiredInput("auth_token")
-	roomID := validateRequiredInput("room_id")
-	fromName := validateRequiredInput("from_name")
-	message := validateRequiredInput("message")
-
-	//optional inputs
-	messageColor := validateInput("color", "yellow")
-
-	errorFromName := validateInput("from_name_on_error", fromName)
-	errorMessage := validateInput("message_on_error", message)
-	errorMessageColor := validateInput("color_on_error", messageColor)
-
-	messageFormat := validateInput("message_format", "text")
-
-	isBuildFailedMode := (os.Getenv("STEPLIB_BUILD_STATUS") != "0")
-	if isBuildFailedMode {
-		fromName = errorFromName
-		message = errorMessage
-		messageColor = errorMessageColor
-	}
 
 	fmt.Println()
 
-	printConfig(roomID, fromName, message, messageColor, errorFromName, errorMessage, errorMessageColor, messageFormat)
+	config := createConfigsModelFromEnvs()
+
+	config.print()
+
+	isFailed := (config.isBuildFailedMode != "0")
+
+	if isFailed {
+		config.fromName = config.fromNameOnError
+		config.message = config.messageOnError
+		config.messageColor = config.messageColorOnError
+	}
+
+	//printConfig(roomID, fromName, message, messageColor, errorFromName, errorMessage, errorMessageColor, messageFormat)
 
 	//
 	// Create request
-	logInfo("Performing request")
+	fmt.Println()
+	log.Infof("Performing request")
+	fmt.Println()
 
 	values := url.Values{
-		"room_id":        {roomID},
-		"from":           {fromName},
-		"message":        {message},
-		"color":          {messageColor},
-		"message_format": {messageFormat},
+		"room_id":        {config.roomID},
+		"from":           {config.fromName},
+		"message":        {config.message},
+		"color":          {config.messageColor},
+		"message_format": {config.messageFormat},
 	}
+
 	valuesReader := *strings.NewReader(values.Encode())
 
-	url := baseURL + "/rooms/message?auth_token=" + token
+	url := baseURL + "/rooms/message?auth_token=" + config.token
 
 	request, err := http.NewRequest("POST", url, &valuesReader)
+
 	if err != nil {
-		logFail("Failed to create request, error: %s", err)
+		log.Errorf("failed to perform request, error: %s", err)
+		os.Exit(1)
 	}
+
 	request.Header.Add("Accept", "application/json")
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	client := &http.Client{}
 	response, requestErr := client.Do(request)
 
-	defer response.Body.Close()
 	contents, readErr := ioutil.ReadAll(response.Body)
 
 	//
@@ -146,34 +139,43 @@ func main() {
 	// Error
 	if requestErr != nil {
 		if readErr != nil {
-			logWarn("Failed to read response body, error: %#v", readErr)
+			log.Warnf("Failed to read response body, error: %#v", readErr)
 		} else {
-			logInfo("Response:")
-			logDetails("status code: %d", response.StatusCode)
-			logDetails("body: %s", string(contents))
+			log.Infof("Response:")
+			log.Printf("status code: %d", response.StatusCode)
+			log.Printf("body: %s", string(contents))
 		}
-		logFail("Performing request failed, error: %#v", requestErr)
+		log.Errorf("Performing request failed, error: %#v", requestErr)
+		os.Exit(1)
 	}
 
 	if response.StatusCode < 200 || response.StatusCode > 300 {
 		if readErr != nil {
-			logWarn("Failed to read response body, error: %#v", readErr)
+			log.Warnf("Failed to read response body, error: %#v", readErr)
 		} else {
-			logInfo("Response:")
-			logDetails("status code: %d", response.StatusCode)
-			logDetails("body: %s", string(contents))
+			log.Infof("Response:")
+			log.Printf("status code: %d", response.StatusCode)
+			log.Printf("body: %s", string(contents))
 		}
-		logFail("Performing request failed, status code: %d", response.StatusCode)
+		log.Errorf("Performing request failed, status code: %d", response.StatusCode)
+		os.Exit(1)
 	}
 
 	// Success
-	logDone("Request succed")
+	log.Donef("Request successful")
 
-	logInfo("Response:")
-	logDetails("status code: %d", response.StatusCode)
-	logDetails("body: %s", contents)
+	fmt.Println()
+
+	log.Infof("Response:")
+	log.Printf("status code: %d", response.StatusCode)
+	log.Printf("body: %s", contents)
+
+	fmt.Println()
 
 	if readErr != nil {
-		logFail("Failed to read response body, error: %#v", readErr)
+		log.Errorf("Failed to read response body, error: %#v", readErr)
+		fmt.Println()
+		os.Exit(1)
 	}
+
 }

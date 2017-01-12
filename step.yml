@@ -42,16 +42,16 @@ inputs:
       description: |
         The one which should be presented as the sender of the message.
 
-        *max 15 characters*
+        *1 - 15 characters*
       is_required: true
-  - from_name_on_error:
+  - from_name_on_error: Bitrise CI
     opts:
       title: "From Name - if the build failed"
       description: |
         **This option will be used if the build failed.** If you
         leave this option empty then the default one will be use.
 
-        *max 15 characters*
+        *1 - 15 characters*
   - message: "Bitrise workflow run succeeded"
     opts:
       title: "The message you want to send"
@@ -62,7 +62,7 @@ inputs:
       description: |
         **This option will be used if the build failed.** If you
         leave this option empty then the default one will be used.
-  - color: green
+  - message_color: green
     opts:
       title: Message Color
       value_options:
@@ -72,7 +72,7 @@ inputs:
         - purple
         - gray
         - random
-  - color_on_error: red
+  - message_color_on_error: red
     opts:
       title: "Message Color - if the build failed"
       description: |

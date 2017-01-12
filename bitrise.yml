@@ -1,4 +1,4 @@
-format_version: 1.1.0
+format_version: 1.3.1
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 
 app:
@@ -12,6 +12,7 @@ workflows:
   # --- workflow to test this step
   test:
     before_run:
+    - godeps-update
     - go-tests
     steps:
     - path::./:
@@ -74,6 +75,7 @@ workflows:
             #!/bin/bash
             set -ex
             go test ./...
+
   _install-test-tools:
     steps:
     - script:
@@ -82,8 +84,8 @@ workflows:
         - content: |-
             #!/bin/bash
             set -ex
-          
-            go get ./...
+            go get -u github.com/kisielk/errcheck
+            go get -u -v github.com/golang/lint/golint
 
   # ----------------------------------------------------------------
   # --- Utility workflows
@@ -100,6 +102,7 @@ workflows:
             rm -rf ./Godeps
             rm -rf ./vendor
             go get -t -d ./...
+            pwd
             godep save ./...
 
 
