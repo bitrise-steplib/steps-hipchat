@@ -27,12 +27,12 @@ type ConfigsModel struct {
 	//onSuccess
 	fromName     string
 	message      string
-	messageColor string
+	color string
 
 	//onFail
 	fromNameOnError     string
 	messageOnError      string
-	messageColorOnError string
+	colorOnError string
 
 	//settings
 	messageFormat     string
@@ -50,14 +50,14 @@ func createConfigsModelFromEnvs() ConfigsModel {
 
 		fromName:     os.Getenv("from_name"),
 		message:      os.Getenv("message"),
-		messageColor: os.Getenv("message_color"),
+		color: os.Getenv("color"),
 
 		fromNameOnError:     os.Getenv("from_name_on_error"),
 		messageOnError:      os.Getenv("message_on_error"),
-		messageColorOnError: os.Getenv("message_color_on_error"),
+		colorOnError: os.Getenv("color_on_error"),
 
 		messageFormat:     os.Getenv("message_format"),
-		isBuildFailedMode: os.Getenv("STEPLIB_BUILD_STATUS"),
+		isBuildFailedMode: os.Getenv("BITRISE_BUILD_STATUS"),
 	}
 }
 
@@ -69,11 +69,11 @@ func (configs ConfigsModel) print() {
 
 	log.Printf("- fromName: %s", configs.fromName)
 	log.Printf("- message: %s", configs.message)
-	log.Printf("- messageColor: %s", configs.messageColor)
+	log.Printf("- color: %s", configs.color)
 
 	log.Printf("- fromNameOnError: %s", configs.fromNameOnError)
 	log.Printf("- messageOnError: %s", configs.messageOnError)
-	log.Printf("- messageColorOnError: %s", configs.messageColorOnError)
+	log.Printf("- colorOnError: %s", configs.colorOnError)
 
 	log.Printf("- messageFormat: %s", configs.messageFormat)
 }
@@ -95,11 +95,10 @@ func main() {
 	if isFailed {
 		config.fromName = config.fromNameOnError
 		config.message = config.messageOnError
-		config.messageColor = config.messageColorOnError
+		config.color = config.colorOnError
 	}
 
-	//printConfig(roomID, fromName, message, messageColor, errorFromName, errorMessage, errorMessageColor, messageFormat)
-
+	
 	//
 	// Create request
 	fmt.Println()
@@ -110,7 +109,7 @@ func main() {
 		"room_id":        {config.roomID},
 		"from":           {config.fromName},
 		"message":        {config.message},
-		"color":          {config.messageColor},
+		"color":          {config.color},
 		"message_format": {config.messageFormat},
 	}
 

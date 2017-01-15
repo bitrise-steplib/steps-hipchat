@@ -62,7 +62,7 @@ inputs:
       description: |
         **This option will be used if the build failed.** If you
         leave this option empty then the default one will be used.
-  - message_color: green
+  - color: green
     opts:
       title: Message Color
       value_options:
@@ -72,7 +72,7 @@ inputs:
         - purple
         - gray
         - random
-  - message_color_on_error: red
+  - color_on_error: red
     opts:
       title: "Message Color - if the build failed"
       description: |

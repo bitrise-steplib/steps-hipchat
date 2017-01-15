@@ -12,7 +12,6 @@ workflows:
   # --- workflow to test this step
   test:
     before_run:
-    - godeps-update
     - go-tests
     steps:
     - path::./:
