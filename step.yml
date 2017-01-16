@@ -23,6 +23,9 @@ is_skippable: true
 deps:
   brew:
   - name: go
+toolkit:
+  go:
+    package_name: github.com/bitrise-io/steps-hipchat
 inputs:
   - auth_token:
     opts:

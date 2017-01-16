@@ -25,14 +25,14 @@ type ConfigsModel struct {
 	roomID string
 
 	//onSuccess
-	fromName     string
-	message      string
-	color string
+	fromName string
+	message  string
+	color    string
 
 	//onFail
-	fromNameOnError     string
-	messageOnError      string
-	colorOnError string
+	fromNameOnError string
+	messageOnError  string
+	colorOnError    string
 
 	//settings
 	messageFormat     string
@@ -48,13 +48,13 @@ func createConfigsModelFromEnvs() ConfigsModel {
 		token:  os.Getenv("auth_token"),
 		roomID: os.Getenv("room_id"),
 
-		fromName:     os.Getenv("from_name"),
-		message:      os.Getenv("message"),
-		color: os.Getenv("color"),
+		fromName: os.Getenv("from_name"),
+		message:  os.Getenv("message"),
+		color:    os.Getenv("color"),
 
-		fromNameOnError:     os.Getenv("from_name_on_error"),
-		messageOnError:      os.Getenv("message_on_error"),
-		colorOnError: os.Getenv("color_on_error"),
+		fromNameOnError: os.Getenv("from_name_on_error"),
+		messageOnError:  os.Getenv("message_on_error"),
+		colorOnError:    os.Getenv("color_on_error"),
 
 		messageFormat:     os.Getenv("message_format"),
 		isBuildFailedMode: os.Getenv("BITRISE_BUILD_STATUS"),
@@ -98,7 +98,6 @@ func main() {
 		config.color = config.colorOnError
 	}
 
-	
 	//
 	// Create request
 	fmt.Println()
@@ -128,35 +127,31 @@ func main() {
 	request.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
 	client := &http.Client{}
-	response, requestErr := client.Do(request)
+	response, err := client.Do(request)
 
-	contents, readErr := ioutil.ReadAll(response.Body)
-
-	//
-	// Process response
-
-	// Error
-	if requestErr != nil {
-		if readErr != nil {
-			log.Warnf("Failed to read response body, error: %#v", readErr)
-		} else {
-			log.Infof("Response:")
-			log.Printf("status code: %d", response.StatusCode)
-			log.Printf("body: %s", string(contents))
-		}
-		log.Errorf("Performing request failed, error: %#v", requestErr)
+	if err != nil {
+		// On error, any Response can be ignored
+		log.Errorf("failed to perform request, error: %s", err)
 		os.Exit(1)
 	}
 
-	if response.StatusCode < 200 || response.StatusCode > 300 {
-		if readErr != nil {
-			log.Warnf("Failed to read response body, error: %#v", readErr)
-		} else {
-			log.Infof("Response:")
-			log.Printf("status code: %d", response.StatusCode)
-			log.Printf("body: %s", string(contents))
+	// The client must close the response body when finished with it
+	defer func() {
+		if err := response.Body.Close(); err != nil {
+			log.Errorf("Failed to close response body, error: %s", err)
+			os.Exit(1)
 		}
-		log.Errorf("Performing request failed, status code: %d", response.StatusCode)
+	}()
+
+	body, err := ioutil.ReadAll(response.Body)
+
+	if err != nil {
+		log.Errorf("failed to read response body, error: %s", err)
+		os.Exit(1)
+	}
+
+	if response.StatusCode < http.StatusOK || response.StatusCode > http.StatusMultipleChoices {
+		log.Errorf("non success status code")
 		os.Exit(1)
 	}
 
@@ -167,14 +162,8 @@ func main() {
 
 	log.Infof("Response:")
 	log.Printf("status code: %d", response.StatusCode)
-	log.Printf("body: %s", contents)
+	log.Printf("body: %s", body)
 
 	fmt.Println()
-
-	if readErr != nil {
-		log.Errorf("Failed to read response body, error: %#v", readErr)
-		fmt.Println()
-		os.Exit(1)
-	}
 
 }
