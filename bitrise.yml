@@ -1,4 +1,4 @@
-format_version: 1.1.0
+format_version: 1.3.1
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 
 app:
@@ -11,6 +11,8 @@ workflows:
   # ----------------------------------------------------------------
   # --- workflow to test this step
   test:
+    before_run:
+    - go-tests
     steps:
     - path::./:
         title: On Success
@@ -27,6 +29,82 @@ workflows:
         inputs:
         - auth_token: $auth_token
         - room_id: $room_id
+
+  go-tests:
+    before_run:
+    - _install-test-tools
+    steps:
+    - script:
+        title: Export go files to test
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+
+            no_vendor_paths="$(go list ./... | grep -v vendor)"
+            envman add --key GOLIST_WITHOUT_VENDOR --value "$no_vendor_paths"
+    - script:
+        title: Err check
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+
+            errcheck -asserts=true -blank=true $GOLIST_WITHOUT_VENDOR
+    - script:
+        title: Go lint
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+
+            while read -r line; do
+              echo "-> Linting: $line"
+              golint_out="$(golint $line)"
+              if [[ "${golint_out}" != "" ]] ; then
+                echo "=> Golint issues found:"
+                echo "${golint_out}"
+                exit 1
+              fi
+            done <<< "$GOLIST_WITHOUT_VENDOR"
+    - script:
+        title: Go test
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+            go test ./...
+
+  _install-test-tools:
+    steps:
+    - script:
+        title: Install required testing tools
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -ex
+            go get -u github.com/kisielk/errcheck
+            go get -u -v github.com/golang/lint/golint
+
+  # ----------------------------------------------------------------
+  # --- Utility workflows
+  godeps-update:
+    title: Godeps update
+    steps:
+    - script:
+        title: Dependency update
+        inputs:
+        - content: |
+            #!/bin/bash
+            set -ex
+            go get -u -v github.com/tools/godep
+            rm -rf ./Godeps
+            rm -rf ./vendor
+            go get -t -d ./...
+            pwd
+            godep save ./...
+
+
 
   # ----------------------------------------------------------------
   # --- workflow to Release a new version with auto version bump

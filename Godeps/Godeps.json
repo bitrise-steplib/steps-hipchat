@@ -1,0 +1,18 @@
+{
+	"ImportPath": "github.com/trapacska/steps-hipchat",
+	"GoVersion": "go1.6",
+	"GodepVersion": "v76",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/bitrise-io/go-utils/colorstring",
+			"Rev": "9293e3cd2183fa777cd956af436309872de0f2ec"
+		},
+		{
+			"ImportPath": "github.com/bitrise-io/go-utils/log",
+			"Rev": "9293e3cd2183fa777cd956af436309872de0f2ec"
+		}
+	]
+}
