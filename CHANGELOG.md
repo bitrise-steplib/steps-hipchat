@@ -1,6 +1,13 @@
-## Changelog (Current version: 3.0.2)
+## Changelog (Current version: 3.0.3)
 
 -----------------
+
+### 3.0.3 (2017 Jan 23)
+
+* [789c8d5] release config update
+* [1f0753f] prepare for 3.0.3
+* [acc5685] error logs, bitrise.yml updates (#16)
+* [c49f1d4] Updated code and formatting issues fixed (#15)
 
 ### 3.0.2 (2016 Feb 29)
 
@@ -151,4 +158,4 @@
 
 -----------------
 
-Updated: 2016 Feb 29
+Updated: 2017 Jan 23
