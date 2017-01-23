@@ -3,9 +3,10 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 
 app:
   envs:
+  - STEP_VERSION: 3.0.1
   # define these in your .bitrise.secrets.yml
-  - auth_token: $AUTH_TOKEN
-  - room_id: $ROOM_ID
+  - AUTH_TOKEN: $AUTH_TOKEN
+  - ROOM_ID: $ROOM_ID
 
 workflows:
   # ----------------------------------------------------------------
@@ -17,18 +18,9 @@ workflows:
     - path::./:
         title: On Success
         inputs:
-        - auth_token: $auth_token
-        - room_id: $room_id
+        - auth_token: $AUTH_TOKEN
+        - room_id: $ROOM_ID
         - message: <a href="http://www.w3schools.com">Visit W3Schools</a>
-    - script:
-        title: Fail
-        inputs:
-        - content: exit 1
-    - path::./:
-        title: On Error
-        inputs:
-        - auth_token: $auth_token
-        - room_id: $room_id
 
   go-tests:
     before_run:
@@ -83,7 +75,11 @@ workflows:
         - content: |-
             #!/bin/bash
             set -ex
-            go get -u github.com/kisielk/errcheck
+
+            # Check for unhandled errors
+            go get -u -v github.com/kisielk/errcheck
+
+            # Go lint
             go get -u -v github.com/golang/lint/golint
 
   # ----------------------------------------------------------------
@@ -98,17 +94,17 @@ workflows:
             #!/bin/bash
             set -ex
             go get -u -v github.com/tools/godep
+
             rm -rf ./Godeps
             rm -rf ./vendor
+
             go get -t -d ./...
-            pwd
             godep save ./...
 
-
-
   # ----------------------------------------------------------------
-  # --- workflow to Release a new version with auto version bump
+  # --- workflows to create Release
   create-release:
+    title: Create release with Releaseman
     steps:
     - script:
         title:
@@ -118,33 +114,28 @@ workflows:
             set -e
 
             export CI=true
-            releaseman create --bump-version patch
+            releaseman create --version $STEP_VERSION
 
   # ----------------------------------------------------------------
-  # --- workflow to Release a new version
-  create-release-version:
-    envs:
-    - RELEASE_VERSION: 3.0.1
+  # --- workflows to Share this step into a Step Library
+  audit-this-step:
+    title: Audit the step
     steps:
     - script:
-        title:
         inputs:
-        - content: |
+        - content: |-
             #!/bin/bash
-            set -e
+            set -ex
+            stepman audit --step-yml ./step.yml
 
-            export CI=true
-            releaseman create --version $RELEASE_VERSION
-
-  # ----------------------------------------------------------------
-  # --- workflow to Share this step into a Step Library
   share-this-step:
     envs:
       # if you want to share this step into a StepLib
       - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
       - STEP_ID_IN_STEPLIB: hipchat
-      - STEP_GIT_VERION_TAG_TO_SHARE: 3.0.1
+      - STEP_GIT_VERION_TAG_TO_SHARE: $STEP_VERSION
       - STEP_GIT_CLONE_URL: https://github.com/bitrise-io/steps-hipchat.git
+    title: Share the step
     description: |-
       If this is the first time you try to share a Step you should
       first call: $ bitrise share
@@ -166,16 +157,14 @@ workflows:
 
       Once it finishes the only thing left is to actually create a Pull Request,
       the way described in the guide printed at the end of the process.
+    before_run:
+    - audit-this-step
     steps:
     - script:
         inputs:
         - content: |-
             #!/bin/bash
-            set -e
-            set -x
-
+            set -ex
             bitrise share start -c ${MY_STEPLIB_REPO_FORK_GIT_URL}
-
             bitrise share create --stepid ${STEP_ID_IN_STEPLIB} --tag ${STEP_GIT_VERION_TAG_TO_SHARE} --git ${STEP_GIT_CLONE_URL}
-
             bitrise share finish

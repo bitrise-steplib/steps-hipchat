@@ -151,7 +151,8 @@ func main() {
 	}
 
 	if response.StatusCode < http.StatusOK || response.StatusCode > http.StatusMultipleChoices {
-		log.Errorf("non success status code")
+		log.Errorf("non success status code (%d)", response.StatusCode)
+		log.Printf("body: %s", body)
 		os.Exit(1)
 	}
 
