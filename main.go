@@ -28,11 +28,13 @@ type ConfigsModel struct {
 	fromName string
 	message  string
 	color    string
+	notify   string
 
 	//onFail
 	fromNameOnError string
 	messageOnError  string
 	colorOnError    string
+	notifyOnError   string
 
 	//settings
 	messageFormat     string
@@ -51,10 +53,12 @@ func createConfigsModelFromEnvs() ConfigsModel {
 		fromName: os.Getenv("from_name"),
 		message:  os.Getenv("message"),
 		color:    os.Getenv("color"),
+		notify:   os.Getenv("notify"),
 
 		fromNameOnError: os.Getenv("from_name_on_error"),
 		messageOnError:  os.Getenv("message_on_error"),
 		colorOnError:    os.Getenv("color_on_error"),
+		notifyOnError:   os.Getenv("notify_on_error"),
 
 		messageFormat:     os.Getenv("message_format"),
 		isBuildFailedMode: os.Getenv("BITRISE_BUILD_STATUS"),
@@ -70,10 +74,12 @@ func (configs ConfigsModel) print() {
 	log.Printf("- fromName: %s", configs.fromName)
 	log.Printf("- message: %s", configs.message)
 	log.Printf("- color: %s", configs.color)
+	log.Printf("- notify: %s", configs.notify)
 
 	log.Printf("- fromNameOnError: %s", configs.fromNameOnError)
 	log.Printf("- messageOnError: %s", configs.messageOnError)
 	log.Printf("- colorOnError: %s", configs.colorOnError)
+	log.Printf("- notifyOnError: %s", configs.notifyOnError)
 
 	log.Printf("- messageFormat: %s", configs.messageFormat)
 }
@@ -96,6 +102,7 @@ func main() {
 		config.fromName = config.fromNameOnError
 		config.message = config.messageOnError
 		config.color = config.colorOnError
+		config.notify = config.notifyOnError
 	}
 
 	//
@@ -110,6 +117,7 @@ func main() {
 		"message":        {config.message},
 		"color":          {config.color},
 		"message_format": {config.messageFormat},
+		"notify":         {config.notify},
 	}
 
 	valuesReader := *strings.NewReader(values.Encode())
