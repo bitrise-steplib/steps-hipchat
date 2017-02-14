@@ -105,13 +105,6 @@ func main() {
 		config.notify = config.notifyOnError
 	}
 
-	// Convert notify "true", "false" to "1", "0" to match API expectation
-	if config.notify == "true" {
-		config.notify = "1"
-	} else {
-		config.notify = "0"
-	}
-
 	//
 	// Create request
 	fmt.Println()
