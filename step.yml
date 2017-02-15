@@ -65,6 +65,18 @@ inputs:
       description: |
         **This option will be used if the build failed.** If you
         leave this option empty then the default one will be used.
+  - notify: "0"
+    opts:
+      title: "Notify if the build succeeded"
+      value_options:
+        - "0"
+        - "1"
+  - notify_on_error: "1"
+    opts:
+      title: "Notify if the build failed"
+      value_options:
+        - "0"
+        - "1"
   - color: green
     opts:
       title: Message Color
