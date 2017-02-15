@@ -1,6 +1,11 @@
-## Changelog (Current version: 3.0.3)
+## Changelog (Current version: 3.0.4)
 
 -----------------
+
+### 3.0.4 (2017 Feb 15)
+
+* [3f8b171] Prepare for 3.0.4
+* [2510928] Add support for notifying rooms (#17)
 
 ### 3.0.3 (2017 Jan 23)
 
@@ -158,4 +163,4 @@
 
 -----------------
 
-Updated: 2017 Jan 23
+Updated: 2017 Feb 15
