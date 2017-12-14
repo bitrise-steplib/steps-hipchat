@@ -31,7 +31,7 @@ inputs:
     opts:
       title: HipChat Auth Token
       description: |
-        This Step uses HipChat API v1, you can register a v1 API Token at [https://www.hipchat.com/admin/api](https://www.hipchat.com/admin/api).
+        This Step uses HipChat API v1, you can register a v1 API Token at [https://www.hipchat.com/admin/api](https://www.hipchat.com/admin/api) or on your own server.
       is_required: true
   - room_id:
     opts:
@@ -106,3 +106,11 @@ inputs:
      value_options:
        - html
        - text
+  - server_url: https://api.hipchat.com/v1
+    opts:
+     title: "The base url for the server to use"
+     description: |
+       **Here you can define the server url to use. For basic hipchat
+       integration, leave the default value. For enterprise
+       solutions, change this value.
+     is_required: true
