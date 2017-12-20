@@ -1,6 +1,11 @@
-## Changelog (Current version: 3.0.4)
+## Changelog (Current version: 3.1.0)
 
 -----------------
+
+### 3.1.0 (2017 Dec 20)
+
+* [95006d0] Prepare for 3.1.0
+* [c3aee04] Add ability to modify baseURL in bitrise step (#19)
 
 ### 3.0.4 (2017 Feb 15)
 
@@ -163,4 +168,4 @@
 
 -----------------
 
-Updated: 2017 Feb 15
+Updated: 2017 Dec 20
