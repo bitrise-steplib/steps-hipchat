@@ -11,13 +11,6 @@ import (
 	"github.com/bitrise-io/go-utils/log"
 )
 
-// -----------------------
-// --- Constants
-// -----------------------
-const (
-	baseURL = "https://api.hipchat.com/v1"
-)
-
 // ConfigsModel ...
 type ConfigsModel struct {
 	//oAuth
@@ -37,7 +30,9 @@ type ConfigsModel struct {
 	notifyOnError   string
 
 	//settings
-	messageFormat     string
+	messageFormat string
+	baseURL       string
+
 	isBuildFailedMode string
 }
 
@@ -60,7 +55,9 @@ func createConfigsModelFromEnvs() ConfigsModel {
 		colorOnError:    os.Getenv("color_on_error"),
 		notifyOnError:   os.Getenv("notify_on_error"),
 
-		messageFormat:     os.Getenv("message_format"),
+		messageFormat: os.Getenv("message_format"),
+		baseURL:       os.Getenv("server_url"),
+
 		isBuildFailedMode: os.Getenv("BITRISE_BUILD_STATUS"),
 	}
 }
@@ -82,6 +79,7 @@ func (configs ConfigsModel) print() {
 	log.Printf("- notifyOnError: %s", configs.notifyOnError)
 
 	log.Printf("- messageFormat: %s", configs.messageFormat)
+	log.Printf("- baseURL: %s", configs.baseURL)
 }
 
 // -----------------------
@@ -122,7 +120,7 @@ func main() {
 
 	valuesReader := *strings.NewReader(values.Encode())
 
-	url := baseURL + "/rooms/message?auth_token=" + config.token
+	url := config.baseURL + "/rooms/message?auth_token=" + config.token
 
 	request, err := http.NewRequest("POST", url, &valuesReader)
 
