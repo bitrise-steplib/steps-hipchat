@@ -15,7 +15,6 @@ support_url: https://github.com/bitrise-io/steps-hipchat/issues
 host_os_tags:
   - osx-10.10
 type_tags:
-  - IM
   - notification
 is_requires_admin_user: false
 is_always_run: true
