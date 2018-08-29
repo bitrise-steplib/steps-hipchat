@@ -32,12 +32,14 @@ inputs:
       description: |
         This Step uses HipChat API v1, you can register a v1 API Token at [https://www.hipchat.com/admin/api](https://www.hipchat.com/admin/api) or on your own server.
       is_required: true
+      is_sensitive: true
   - room_id:
     opts:
       title: HipChat RoomID
       description: |
         You can get the *room id* of any HipChat room by selecting *Rooms > Summary > API ID*.
       is_required: true
+      is_sensitive: true
   - from_name: Bitrise CI
     opts:
       title: "From Name"
