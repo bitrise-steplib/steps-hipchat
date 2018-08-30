@@ -6,6 +6,10 @@ HipChat message sender Step.
 
 This Step is part of the [Open StepLib](http://www.steplib.com/), you can find its StepLib page [here](http://www.steplib.com/step/hipchat).
 
+## Trigger a new release
+
+- __merge every code changes__ to the `master` branch
+- __push the new version tag__ to the `master` branch
 
 ## Install this Step on your own machine
 
