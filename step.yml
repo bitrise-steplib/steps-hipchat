@@ -2,13 +2,13 @@ title: Send HipChat message
 summary: |-
   Why bother sending a “done” or "." message to the HipChat room to notify your
   team members that the build / deploy finished with success when Bitrise can
-  do it for you? Simply add the HipChat Step to your Workflow. And also you can
-  change the color of the message to make the chat a bit more hip.
+  do it for you? Simply add the HipChat Step to your Workflow. You can also
+  change the color of the message to make the chat a bit more _hip_.
 description: |-
   Send a [HipChat](https://www.hipchat.com) message to a room.
 
   **This Step requires a HipChat account.**
-  [Click here](https://www.hipchat.com) to sign in or sign up on HipChat, for free.
+  [Click here](https://www.hipchat.com) to sign in to HipChat or to sign up for free.
 website: https://github.com/bitrise-io/steps-hipchat
 source_code_url: https://github.com/bitrise-io/steps-hipchat
 support_url: https://github.com/bitrise-io/steps-hipchat/issues
@@ -44,7 +44,7 @@ inputs:
     opts:
       title: "From Name"
       description: |
-        The one which should be presented as the sender of the message.
+        The specified value will be presented as the sender of the message. 
 
         *1 - 15 characters*
       is_required: true
@@ -53,7 +53,7 @@ inputs:
       title: "From Name - if the build failed"
       description: |
         **This option will be used if the build failed.** If you
-        leave this option empty then the default one will be use.
+        leave this option empty then the default one will be used.
 
         *1 - 15 characters*
   - message: "Bitrise workflow run succeeded"
